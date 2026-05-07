@@ -661,28 +661,43 @@
 
   .sos-drawer {
     position: fixed;
-    right: 0; top: 0; bottom: 0;
-    width: min(440px, 100%);
-    background: rgba(15,15,22,0.96);
-    border-left: 1px solid rgba(255,255,255,0.08);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    transform: translateX(100%);
-    transition: transform 350ms var(--ease);
+    inset: 32px;
+    max-width: 1240px;
+    max-height: calc(100vh - 64px);
+    margin: auto;
+    background: rgba(15,15,22,0.97);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 24px;
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+    pointer-events: none;
+    transition: opacity 280ms var(--ease), transform 320ms var(--ease);
     z-index: 101;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: -20px 0 60px rgba(0,0,0,0.5);
+    box-shadow: 0 30px 90px rgba(0,0,0,0.65), 0 0 0 1px rgba(99,102,241,0.08);
   }
-  .sos-drawer.open { transform: translateX(0); }
+  .sos-drawer.open {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+  }
   .sos-drawer header.sos-head {
-    padding: 22px 24px 18px;
+    padding: 28px 36px 22px;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     gap: 16px;
     border-bottom: 1px solid var(--border);
+  }
+  .sos-drawer h3 {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
   }
   .sos-eyebrow {
     font-family: var(--font-mono);
@@ -714,21 +729,22 @@
   .sos-tabs {
     display: flex;
     overflow-x: auto;
-    padding: 14px 18px 0;
-    gap: 6px;
+    padding: 16px 28px 0;
+    gap: 4px;
     border-bottom: 1px solid var(--border);
     scrollbar-width: thin;
+    flex-shrink: 0;
   }
   .sos-tab {
     flex-shrink: 0;
-    padding: 10px 14px;
-    font-size: 12px;
+    padding: 12px 18px;
+    font-size: 13px;
     font-weight: 500;
     color: var(--text-secondary);
     background: transparent;
     border: 1px solid transparent;
     border-bottom: none;
-    border-radius: 8px 8px 0 0;
+    border-radius: 10px 10px 0 0;
     transition: all 200ms var(--ease);
     margin-bottom: -1px;
     white-space: nowrap;
@@ -738,29 +754,34 @@
     color: var(--text-primary);
     background: var(--bg-elevated);
     border-color: var(--border);
-    border-bottom-color: rgba(15,15,22,0.96);
+    border-bottom-color: rgba(15,15,22,0.97);
   }
 
   .sos-content {
     flex: 1;
     overflow-y: auto;
-    padding: 22px 24px 60px;
+    padding: 32px 36px 64px;
     scrollbar-width: thin;
+  }
+  .sos-panel {
+    max-width: 860px;
+    margin: 0 auto;
   }
   .sos-panel { display: none; animation: sos-fade 280ms var(--ease); }
   .sos-panel.active { display: block; }
   @keyframes sos-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
   .sos-panel h4 {
     font-family: var(--font-display);
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 500;
     color: var(--text-primary);
-    margin: 18px 0 8px;
+    margin: 24px 0 10px;
+    letter-spacing: -0.01em;
   }
   .sos-panel h4:first-child { margin-top: 0; }
-  .sos-panel p { font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 10px; }
-  .sos-panel ul, .sos-panel ol { font-size: 13px; line-height: 1.65; color: var(--text-secondary); padding-left: 20px; margin-bottom: 12px; }
-  .sos-panel li { margin-bottom: 5px; }
+  .sos-panel p { font-size: 14.5px; line-height: 1.65; color: var(--text-secondary); margin-bottom: 12px; }
+  .sos-panel ul, .sos-panel ol { font-size: 14.5px; line-height: 1.7; color: var(--text-secondary); padding-left: 22px; margin-bottom: 14px; }
+  .sos-panel li { margin-bottom: 7px; }
   .sos-panel strong { color: var(--text-primary); font-weight: 500; }
   .sos-panel code {
     font-family: var(--font-mono);
@@ -799,6 +820,22 @@
     color: #fcd34d;
   }
 
+  @media (max-width: 920px) {
+    .sos-drawer {
+      inset: 0;
+      max-width: 100%;
+      max-height: 100vh;
+      border-radius: 0;
+      border: none;
+    }
+    .sos-drawer header.sos-head { padding: 18px 20px 14px; }
+    .sos-drawer h3 { font-size: 22px; }
+    .sos-tabs { padding: 12px 14px 0; }
+    .sos-tab { padding: 10px 14px; font-size: 12px; }
+    .sos-content { padding: 22px 20px 80px; }
+    .sos-panel h4 { font-size: 16px; }
+    .sos-panel p, .sos-panel ul, .sos-panel ol { font-size: 14px; }
+  }
   @media (max-width: 720px) {
     .sos-btn { right: 16px; bottom: 16px; padding: 12px 18px; font-size: 13px; }
     .sos-btn .sos-label { display: none; }
@@ -1609,49 +1646,95 @@
             </div></div>
           </article>
 
-          <!-- 5.1b — Microfones + soundcheck -->
+          <!-- 5.1b — Microfones wireless dinâmicos + soundcheck -->
           <article class="task" data-id="5.1b">
             <div class="task-row">
               <button class="task-check"></button>
               <div class="task-content">
                 <div class="task-head">
-                  <h3 class="task-title">Conectar microfones e fazer soundcheck</h3>
+                  <h3 class="task-title">Conectar microfones wireless dinâmicos e fazer soundcheck</h3>
                   <span class="badge amanha">Sex 8/5</span>
                   <span class="badge urgente">Urgente</span>
                 </div>
-                <p class="task-desc">Áudio ruim mata uma live mais rápido que vídeo ruim — ninguém aguenta 5 minutos de chiado.</p>
+                <p class="task-desc">Setup: 2× mic dinâmico sem fio (TX) → receiver (RX) → cabo XLR → Zoom H6 (CH1/CH2). Áudio ruim mata uma live mais rápido que vídeo ruim.</p>
                 <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
               </div>
             </div>
             <div class="task-detail"><div class="task-detail-inner">
-              <p><strong>Conectar nos canais do Zoom H6:</strong></p>
+              <p><strong>Caminho físico do áudio:</strong></p>
+              <ol>
+                <li>Apresentador fala no mic dinâmico sem fio</li>
+                <li>Transmissor (TX) na cintura do apresentador envia via UHF</li>
+                <li>Receiver (RX) recebe e tem saída XLR</li>
+                <li>Cabo XLR balanceado vai do RX até o Zoom H6 (CH1 ou CH2)</li>
+                <li>H6 conecta via USB ao PC, OBS captura como Mic/Aux Audio</li>
+              </ol>
+
+              <p><strong>Pilhas:</strong> trocar TODAS as pilhas dos transmissores por <strong>alcalinas novas</strong> antes da live. NUNCA usar recarregáveis NiMH (1.2V) — dão dropout em 30 minutos. Alcalinas (1.5V) aguentam 6-8h.</p>
+
+              <p><strong>Conexões físicas no H6:</strong></p>
               <ul>
-                <li>Apresentador 1 → <code>CH1</code> (lapela ou direcional)</li>
+                <li>Apresentador 1 → <code>CH1</code> (XLR balanceado)</li>
                 <li>Apresentador 2 → <code>CH2</code></li>
-                <li>Cabos XLR ou TRS conforme o tipo do mic</li>
+                <li>Encaixar XLR <strong>até travar com clique audível</strong> nos dois lados (RX e H6)</li>
+                <li>Cabo balanceado mesmo se for curto — diferença é zero ruído</li>
+                <li><strong>Phantom Power +48V:</strong> manter <span style="color:#fb923c">DESLIGADO</span> nos dois canais. Mic dinâmico não precisa e não usa. Ligar phantom em dinâmico não estraga, mas é desnecessário e atrapalha em cabo defeituoso.</li>
+                <li>Ativar <code>TRACK</code> nos dois canais (botão fica vermelho). H6 só envia ao USB os canais com TRACK ativo.</li>
               </ul>
-              <p><strong>Phantom power (+48V):</strong> ligar SÓ se o mic for condensador. A maioria dos lapelas profissionais usa pilha própria. Mics dinâmicos e shotguns alimentados por pilha NÃO precisam — phantom em mic dinâmico não estraga, mas é desnecessário.</p>
+
+              <p><strong>Configurar H6 antes do soundcheck:</strong></p>
+              <ul>
+                <li>Sample rate: <code>48 kHz / 24-bit</code> (Menu → Project → Sample Rate)</li>
+                <li>Modo USB: <code>Audio I/F</code> (não SD recorder) — Menu → USB → Audio I/F → Stereo Mix ou Multi Track</li>
+                <li>Low cut filter: <code>ON</code> nos canais de voz (corta rumble &lt;80Hz, ar-condicionado, passos)</li>
+                <li>Limiter: <code>ON</code> nos dois canais (proteção contra picos)</li>
+              </ul>
+
               <p><strong>Soundcheck — protocolo de 60 segundos:</strong></p>
               <ul>
-                <li>Pedir cada apresentador falar <strong>30s em volume normal</strong> de apresentação (não cochichando, não gritando)</li>
-                <li>Ajustar <strong>gain no próprio H6</strong> até pico ficar em <code>-6 dB</code>, com média em <code>-12 a -18 dB</code></li>
-                <li><strong>NÃO ajustar gain no OBS</strong> — sempre na fonte. Subir volume no OBS amplifica o ruído junto com a voz.</li>
+                <li>Apresentador segura o mic em posição NORMAL (5-15cm da boca, levemente fora do eixo)</li>
+                <li>Fala <strong>30 segundos em volume de apresentação</strong> — não cochichando, não gritando</li>
+                <li>Ajustar <strong>knob TRIM/GAIN do H6</strong> até:
+                  <ul>
+                    <li>Pico nos VU não ultrapassa <code>-6 dB</code> (zona amarela)</li>
+                    <li>Média da fala em <code>-12 a -18 dB</code> (zona verde)</li>
+                  </ul>
+                </li>
+                <li><strong>NUNCA ajustar gain no OBS</strong> — sempre na fonte. Subir volume no OBS amplifica chiado junto com voz.</li>
               </ul>
+
               <p><strong>Verificar no mixer do OBS:</strong></p>
               <ul>
-                <li>Picos não passam de <code>-6 dB</code> (zona amarela)</li>
-                <li>Sem ruído de fundo audível (se houver, mover mic, isolar fonte do ruído — ar-condicionado, ventilador, geladeira na parede)</li>
-                <li>Os dois canais balanceados — volume parecido entre os apresentadores</li>
+                <li>Os DOIS canais balanceados — volume parecido entre apresentadores</li>
+                <li>Sem ruído de fundo audível (ar-condicionado, ventilador, geladeira da parede). Se houver, mover mic ou isolar a fonte de ruído</li>
+                <li>Sem chiado/hum (60Hz da rede). Se tiver hum, é cabo XLR ruim ou aterramento — trocar cabo.</li>
               </ul>
-              <p><strong>Compressão suave (recomendado):</strong> em cada canal de mic no OBS, adicionar <code>Filter → Compressor</code>:</p>
+
+              <p><strong>Compressão suave (recomendado) em cada canal no OBS:</strong></p>
               <ul>
+                <li><code>Filter → Compressor</code></li>
                 <li>Ratio: <code>3:1</code></li>
                 <li>Threshold: <code>-18 dB</code></li>
                 <li>Attack: <code>10 ms</code> · Release: <code>100 ms</code></li>
                 <li>Output gain: <code>+3 dB</code></li>
               </ul>
-              <p>Isso evita que picos quando alguém empolgar estourem o áudio.</p>
-              <p><strong>Plano B:</strong> ter um mic backup (USB ou outro lapela) na bolsa. Se um cair, troca em 30s sem parar a live.</p>
+              <p>Evita picos quando alguém empolgar e estourar o áudio.</p>
+
+              <p><strong>Teste de RF (interferência wireless):</strong></p>
+              <ul>
+                <li>Apresentador caminha pelo estúdio até onde vai ficar durante a live</li>
+                <li>Operador escuta se há dropouts ou chiado quando ele se move</li>
+                <li>Se houver: mudar canal RF no TX/RX (botão SCAN no RX → ele acha canal limpo, depois sincronizar TX)</li>
+                <li>Afastar roteadores Wi-Fi 2.4GHz e celulares do receiver</li>
+              </ul>
+
+              <p><strong>Backup já pré-conectado:</strong></p>
+              <ul>
+                <li>Se houver um terceiro set wireless ou um shotgun, deixar conectado em <code>CH3</code> ou <code>CH4</code> do H6, com TRACK desligado mas pronto pra ativar</li>
+                <li>Cabo XLR já passado da posição do apresentador até o H6 — só precisa trocar o mic se o principal cair</li>
+              </ul>
+
+              <p><strong>Plano B se tudo falhar:</strong> mic shotgun no boom apontado pro apresentador. Qualidade pior mas funciona em emergência absoluta.</p>
             </div></div>
           </article>
 
@@ -2005,6 +2088,7 @@
     <button class="sos-tab" data-tab="audio" role="tab">Áudio sumiu</button>
     <button class="sos-tab" data-tab="video" role="tab">Vídeo travou</button>
     <button class="sos-tab" data-tab="mic" role="tab">Mic ruim</button>
+    <button class="sos-tab" data-tab="bt" role="tab">Fones BT</button>
     <button class="sos-tab" data-tab="zoom" role="tab">Zoom rejoin</button>
     <button class="sos-tab" data-tab="check" role="tab">Pré-live 60s</button>
   </nav>
@@ -2049,30 +2133,44 @@
     <!-- Tab: Áudio sumiu -->
     <article class="sos-panel" data-panel="audio">
       <h4>Sintoma</h4>
-      <p>Participantes não te ouvem. VU meter no OBS não mexe ou Zoom mostra "Mic muted".</p>
+      <p>Participantes não ouvem o apresentador. VU meter no OBS não mexe quando ele fala.</p>
+      <p><strong>Caminho do áudio:</strong> Mic dinâmico (sem fio) → Receiver wireless → cabo XLR → Zoom H6 (CH1/CH2) → USB → PC → VoiceMeeter B1 → Zoom.</p>
 
       <div class="sos-fix">
-        <div class="sos-fix-label">🔍 Checklist em ordem (10s cada)</div>
+        <div class="sos-fix-label">🔍 Checklist em ordem — do mic até o Zoom</div>
         <ol>
-          <li><strong>H6 ainda conectado?</strong> LED do H6 ligado? Cabo USB no PC?</li>
-          <li><strong>Mic mudo no H6?</strong> Botão MUTE de cada canal está ativo?</li>
-          <li><strong>Mic mudo no apresentador?</strong> Lapela tem botão de mute físico</li>
-          <li><strong>VU meter no OBS:</strong> faixa do mic mexe quando alguém fala? Se não, problema é do H6 → Windows</li>
-          <li><strong>Windows Sound Settings:</strong> H6 ainda é o Input default? Sample rate ainda é 48kHz?</li>
-          <li><strong>VoiceMeeter:</strong> volume do Hardware Input 1 não está em -∞?</li>
-          <li><strong>Zoom muted?</strong> <code>Alt+A</code> pra unmute. Verificar canto inferior esquerdo do Zoom.</li>
+          <li><strong>1. Transmissor wireless (TX, na cintura do apresentador):</strong> LED aceso? Bateria não acabou? Botão de mute do TX não foi acionado?</li>
+          <li><strong>2. Receiver wireless (RX, na mesa):</strong> LED verde fixo = OK. Vermelho ou piscando = sem sinal do TX</li>
+          <li><strong>3. Cabo XLR do RX → H6:</strong> conectores TRAVADOS nos dois lados? XLR balanceado tem clique audível ao encaixar — se solto, chia ou silêncio total</li>
+          <li><strong>4. Zoom H6:</strong>
+            <ul>
+              <li>Canal CH1/CH2 com botão TRACK aceso (vermelho)?</li>
+              <li>Knob de TRIM/GAIN não está zerado?</li>
+              <li>H6 ligado? (LED USB aceso, display ativo)</li>
+            </ul>
+          </li>
+          <li><strong>5. Cabo USB H6 → PC:</strong> firme nos dois lados? PC reconhece como "Zoom H6" no Gerenciador de Dispositivos?</li>
+          <li><strong>6. Windows Sound Settings:</strong> "Zoom H6" ainda é o Input default? Sample rate em 48kHz?</li>
+          <li><strong>7. OBS mixer:</strong> faixa do Mic/Aux mexe quando alguém fala? Se não, problema está antes do OBS (H6/Windows)</li>
+          <li><strong>8. VoiceMeeter:</strong> Hardware Input 1 (H6) com volume normal, botão B1 ativo (envia pro Zoom)</li>
+          <li><strong>9. Zoom mic:</strong> <code>VoiceMeeter Output</code> selecionado? <code>Alt+A</code> pra confirmar que não está mute</li>
         </ol>
       </div>
 
       <h4>Restart rápido sem perder a live</h4>
       <ul>
-        <li><strong>H6:</strong> tirar e recolocar o cabo USB. Windows reidentifica em 3s. OBS reconecta automático.</li>
-        <li><strong>VoiceMeeter travou:</strong> Menu → System Settings → Restart Audio Engine (ou <code>Ctrl+R</code>)</li>
-        <li><strong>Bluetooth do Windows:</strong> <code>Win+R</code> → <code>services.msc</code> → "Bluetooth Support Service" → Restart</li>
+        <li><strong>Wireless TX/RX:</strong> desligar/ligar os dois (3 segundos). Reaparelha automático.</li>
+        <li><strong>H6:</strong> tirar e recolocar cabo USB → Windows reidentifica em 3s, OBS reconecta automático</li>
+        <li><strong>VoiceMeeter travou:</strong> Menu → System Settings → <code>Restart Audio Engine</code> (atalho <code>Ctrl+R</code>)</li>
+        <li><strong>OBS mic source perdeu:</strong> botão direito na faixa Mic/Aux → Properties → re-selecionar Zoom H6 → Apply</li>
       </ul>
 
       <div class="sos-warning">
-        <strong>Plano B:</strong> tem um mic USB de backup? Conecta direto, troca o Mic Source no OBS e segue. Operadores devem ter SEMPRE 1 mic USB sobressalente em cima da mesa.
+        <strong>Plano B já pré-configurado:</strong> ter o segundo set wireless (backup) já conectado nos canais CH3/CH4 do H6 com cabo XLR passado. Se um cair, troca o canal ativo no OBS — em 5s volta.
+      </div>
+
+      <div class="sos-warning">
+        <strong>Plano C (último recurso):</strong> mic shotgun no boom, cabo XLR longo até o H6. Qualidade pior mas funciona. Pra emergência absoluta.
       </div>
     </article>
 
@@ -2100,32 +2198,117 @@
       </ul>
     </article>
 
-    <!-- Tab: Mic ruim -->
+    <!-- Tab: Mic ruim (wireless dinâmico XLR) -->
     <article class="sos-panel" data-panel="mic">
       <h4>Sintoma</h4>
-      <p>Áudio chega abafado, com chiado, cortando, eco, distorcendo, ou volume oscila violentamente.</p>
+      <p>Áudio do apresentador chega ruim — chiado, cortando, abafado, baixo, distorcendo, ou volume oscila.</p>
+      <p><strong>Setup:</strong> 2× mic dinâmico sem fio (handheld ou cabeça) → receiver → XLR → Zoom H6.</p>
 
       <div class="sos-fix">
-        <div class="sos-fix-label">🎤 Diagnóstico em 30s</div>
+        <div class="sos-fix-label">🎤 Diagnóstico rápido (30s)</div>
         <ol>
-          <li><strong>Picos vermelhos no mixer OBS?</strong> Está clipando — abaixar o gain <strong>no H6 (físico)</strong>, NUNCA no OBS</li>
-          <li><strong>VU médio em -∞ ou muito baixo?</strong> Subir o gain no H6 até média ficar em -12 dB</li>
-          <li><strong>Áudio cortando intermitente?</strong> Se for fone BT, é interferência ou distância do PC</li>
-          <li><strong>Eco?</strong> Outro mic captou a saída do speaker — usar fones em vez de caixa de som</li>
-          <li><strong>Voz "metálica"?</strong> Compressor com ratio alto demais — verificar Filters no OBS, ratio máximo 4:1</li>
+          <li><strong>Picos vermelhos no mixer OBS?</strong> Está clipando — abaixar TRIM/GAIN <strong>no H6 (físico)</strong>, NUNCA no OBS</li>
+          <li><strong>VU médio em -∞ ou muito baixo?</strong> Subir TRIM/GAIN no H6 até média ficar em -12 dB e picos em -6 dB</li>
+          <li><strong>Cortando intermitente?</strong> Wireless dropout (RF) — distância ou interferência. Pular pra próxima seção.</li>
+          <li><strong>Voz "metálica" / abafada?</strong> Compressor mal configurado no OBS → Filters → desligar temporário</li>
+          <li><strong>Eco?</strong> Apresentador com fone aberto + mic captando o retorno do Zoom. Aumentar isolamento do fone ou abaixar volume do BT.</li>
         </ol>
       </div>
 
-      <h4>Lapela com problema</h4>
+      <h4>Wireless RF cortando ou chiando</h4>
       <ul>
-        <li><strong>Bateria fraca:</strong> ter pilhas/cabos USB-C sobressalentes na mesa</li>
-        <li><strong>Cabo do lapela frouxo:</strong> reposicionar — TRS vs TRRS pode invertercanais</li>
-        <li><strong>Vento/ar-condicionado:</strong> usar a espumninha (windscreen) — ou redirecionar AC</li>
-        <li><strong>Roupa atritando:</strong> reposicionar mic mais alto, longe de tecido</li>
+        <li><strong>LED do receiver (RX):</strong> verde fixo = sinal forte. Piscando ou amarelo = sinal fraco. Vermelho = sem sinal.</li>
+        <li><strong>Distância:</strong> wireless UHF aguenta até 30m com vista direta. Paredes, metal e gente no caminho cortam metade.</li>
+        <li><strong>Interferência típica:</strong>
+          <ul>
+            <li>Roteador Wi-Fi 2.4GHz perto (afasta &gt;3m)</li>
+            <li>Outros wireless mics no mesmo canal (mudar canal RF nos dois TX/RX)</li>
+            <li>Lâmpadas LED baratas (geram ruído UHF)</li>
+            <li>Celular do apresentador no bolso da cintura junto com TX</li>
+          </ul>
+        </li>
+        <li><strong>Mudar canal RF:</strong> a maioria dos wireless tem auto-scan — pressionar "SCAN" no RX, ele acha o canal limpo, depois no TX seguir o canal mostrado</li>
+      </ul>
+
+      <h4>Bateria do transmissor (TX)</h4>
+      <ul>
+        <li><strong>LED do TX piscando vermelho</strong> = bateria &lt;15min. <strong>Trocar AGORA.</strong></li>
+        <li><strong>Pilhas alcalinas novas</strong> aguentam ~6-8h. NUNCA usar recarregáveis genéricas (1.2V em vez de 1.5V — fica fraco).</li>
+        <li>Ter pilhas novas SOBRE a mesa do operador o tempo todo</li>
+        <li><strong>Trocar pilha em 20 segundos sem cortar a live:</strong> apresentador ativa o backup (segundo mic já no rosto), você troca pilha do primeiro, devolve pra ele.</li>
+      </ul>
+
+      <h4>Cabo XLR / conexões</h4>
+      <ul>
+        <li><strong>XLR mal encaixado:</strong> tem que TRAVAR com clique audível. Se balança, chia.</li>
+        <li><strong>Cabo XLR quebrado:</strong> sintoma é chiado quando mexe o cabo. Trocar.</li>
+        <li><strong>Phantom power +48V:</strong> mic dinâmico NÃO PRECISA. Se estiver ligado, dinâmico aguenta sem estragar (não morre), mas se aparecer chiado estranho, desligar phantom no canal específico do H6.</li>
+      </ul>
+
+      <h4>Mic dinâmico — cuidados</h4>
+      <ul>
+        <li><strong>Distância da boca:</strong> ideal 5-15cm. Mais perto = bass excessivo (proximity effect). Mais longe = volume baixo, sons ambiente.</li>
+        <li><strong>Vento/sopro:</strong> usar windscreen (espuminha). Pop filter se for handheld.</li>
+        <li><strong>Plosivas (P, B, T):</strong> falar com mic levemente fora do eixo da boca, não direto na frente</li>
       </ul>
 
       <div class="sos-warning">
-        <strong>Quando trocar de mic ao vivo:</strong> avisar o apresentador, mutar no OBS (ou no H6), trocar fisicamente, voltar audio em 5s. Não tente mudar source no OBS no meio da live — usa o mic backup já configurado em CH3 ou CH4 do H6.
+        <strong>Trocar de mic ao vivo:</strong> avisar apresentador, MUTAR no canal do H6 (botão TRACK fica off), trocar fisicamente, voltar áudio em 5s. NÃO mexer em source do OBS no meio da live — usa o backup já pré-conectado em CH3/CH4.
+      </div>
+    </article>
+
+    <!-- Tab: Fones BT (monitoramento — apresentador não ouve participantes) -->
+    <article class="sos-panel" data-panel="bt">
+      <h4>Sintoma</h4>
+      <p>O apresentador para de ouvir os participantes do Zoom no fone Bluetooth. Faz cara de "?" pra você.</p>
+      <p><strong>Função do fone BT:</strong> apresentador <em>recebe</em> áudio do Zoom (alguém pergunta, comentário, etc). Não envia nada — o áudio dele vai pelo wireless mic XLR.</p>
+
+      <div class="sos-fix">
+        <div class="sos-fix-label">⚡ Fix em 10 segundos</div>
+        <ol>
+          <li><strong>LED do fone BT:</strong> verde piscando = conectado. Apagado/vermelho = desconectou ou bateria fraca</li>
+          <li><strong>Volume zerado:</strong> apresentador pode ter encostado no touch do fone sem querer — pedir pra ele dar tap subir volume</li>
+          <li><strong>VoiceMeeter:</strong> A1 (BT 1) e A2 (BT 2) ainda mostram nome dos fones? Se sumiu = reconectar via Windows Bluetooth</li>
+          <li><strong>Windows Sound:</strong> Output ainda é <code>VoiceMeeter Input</code>? Se mudou pra outro device, áudio não vai pros fones</li>
+          <li><strong>VoiceMeeter "Hardware Out A1/A2":</strong> ainda aponta pro fone correto? Às vezes Windows reordena devices BT após reconexão</li>
+        </ol>
+      </div>
+
+      <h4>Causas comuns</h4>
+      <ul>
+        <li><strong>Distância:</strong> BT classe 2 alcança ~5-10m em campo aberto. Paredes/gente cortam metade.</li>
+        <li><strong>Bateria fraca do fone:</strong> 1-2h de uso na live. Carregar TODOS os fones AT 100% antes de começar. Ter o estojo de carga próximo.</li>
+        <li><strong>Outro device sequestrou:</strong> celular do apresentador re-pareou o fone. Desligar BT do celular dele antes da live.</li>
+        <li><strong>Multipoint confuso:</strong> AirPods e Galaxy Buds pareiam em vários devices simultâneo. Esquecer pareamentos antigos.</li>
+        <li><strong>Windows mudou pra Hands-Free mode:</strong> som vira "telefonema" 8kHz mono — funciona mas chiado. Veja seção abaixo.</li>
+      </ul>
+
+      <h4>⚠️ Pegadinha "Hands-Free vs Stereo"</h4>
+      <p>Se o som do Zoom via BT estiver <strong>chiado, abafado, "telefônico"</strong>, é porque Windows mudou o fone pra modo Hands-Free.</p>
+      <p><strong>Solução:</strong></p>
+      <ol>
+        <li>Botão direito ícone de som → <code>Sound settings → More sound settings</code></li>
+        <li>Aba <strong>Playback</strong></li>
+        <li>Botão direito no <code>[Fone] Hands-Free AG Audio</code> → <strong>Disable</strong></li>
+        <li>Confirmar que o ativo é <code>[Fone] Stereo</code></li>
+        <li>Repetir pros 2 fones</li>
+      </ol>
+      <p>Esse procedimento já deveria estar feito antes da live (ver tarefa 3.1b), mas se algum reset aconteceu, refazer.</p>
+
+      <h4>Reconectar fone que caiu, sem parar a live</h4>
+      <ol>
+        <li>Pegar o estojo do fone (já carregado), abrir tampa perto do PC</li>
+        <li>Windows reconecta automaticamente em 5-10s se já foi pareado</li>
+        <li>Se não reconectar: <code>Settings → Bluetooth &amp; devices</code> → clicar no fone → <strong>Connect</strong></li>
+        <li>No VoiceMeeter: re-selecionar Hardware Out A1 (ou A2) pro fone que voltou</li>
+      </ol>
+
+      <div class="sos-warning">
+        <strong>Plano B se BT der pau total:</strong> fone com fio + splitter P2 (R$15). Plugar P2 splitter na saída do PC ou H6, ambos apresentadores conectam fone com fio. Sem latência, nunca falha. <strong>Ter um splitter na bolsa SEMPRE.</strong>
+      </div>
+
+      <div class="sos-warning">
+        <strong>Plano C (mais agressivo):</strong> apresentador usa o fone com fio plugado direto no celular dele, e o celular conectado no Zoom como participante "muted" só pra escutar. A latência fica do Zoom→celular, sem BT. Funciona em emergência total.
       </div>
     </article>
 
@@ -2163,28 +2346,63 @@
     <!-- Tab: Pré-live 60s -->
     <article class="sos-panel" data-panel="check">
       <h4>Checklist 60 segundos antes do "ao vivo"</h4>
+
+      <h4 style="margin-top:8px">🎤 Áudio (caminho do mic ao Zoom)</h4>
       <ol>
-        <li><strong>OBS:</strong> Virtual Cam ON, scene ativa correta, mixer mostra VU mexendo</li>
-        <li><strong>VoiceMeeter:</strong> aberto, A1+A2+B1 ativos no input do H6</li>
-        <li><strong>Zoom:</strong>
-          <ul>
-            <li>Camera = OBS Virtual Camera</li>
-            <li>Mic = VoiceMeeter Output (ou H6)</li>
-            <li>Speaker NÃO é VoiceMeeter</li>
-          </ul>
-        </li>
-        <li><strong>BTs dos apresentadores:</strong> verde, conectado, em modo Stereo (não Hands-Free)</li>
-        <li><strong>Recording ativo:</strong> Alt+R no Zoom + Start Recording no OBS</li>
+        <li><strong>Wireless TX (apresentadores):</strong> LED aceso nos 2 transmissores · pilha nova · não está mute</li>
+        <li><strong>Wireless RX (receivers):</strong> LED verde fixo nos 2 · cabos XLR travados</li>
+        <li><strong>Zoom H6:</strong> CH1 e CH2 com TRACK ativo, gain calibrado (média -12 dB) · USB conectado · phantom +48V OFF (mic dinâmico não precisa)</li>
+        <li><strong>OBS mixer:</strong> faixa Mic/Aux mexe quando apresentador fala</li>
+        <li><strong>VoiceMeeter:</strong> Hardware Input 1 = H6 · botão B1 ativo</li>
+        <li><strong>Zoom:</strong> Microphone = <code>VoiceMeeter Output</code> · não está mute (Alt+A pra confirmar)</li>
+      </ol>
+
+      <h4>🎧 Monitoramento (fones BT dos apresentadores)</h4>
+      <ol>
+        <li><strong>Fones BT carregados:</strong> 100% no início da live</li>
+        <li><strong>Pareados e em modo Stereo</strong> (não Hands-Free) — som de Zoom via BT deve estar limpo</li>
+        <li><strong>VoiceMeeter A1 e A2:</strong> apontando pros fones corretos</li>
+        <li><strong>Apresentadores ouvem o Zoom:</strong> testar pedindo pra alguém falar do Zoom</li>
+        <li><strong>Splitter P2 + fone com fio</strong> de backup na mesa (caso BT falhe)</li>
+      </ol>
+
+      <h4>📹 Vídeo</h4>
+      <ol>
+        <li><strong>OBS:</strong> Virtual Cam ON · scene ativa correta · preview mostra apresentador bem enquadrado</li>
+        <li><strong>Câmeras Sony:</strong> ambas em PC Remote, USB conectado, sem mensagem de erro</li>
+        <li><strong>Zoom:</strong> Camera = <code>OBS Virtual Camera</code> · Mirror video OFF · HD ativado</li>
+      </ol>
+
+      <h4>🌐 Rede e Zoom</h4>
+      <ol>
+        <li><strong>Cabo Ethernet:</strong> conectado direto, não Wi-Fi</li>
+        <li><strong>Speedtest:</strong> upload &gt;10 Mbps · ping &lt;50ms · jitter &lt;30ms</li>
+        <li><strong>Janela <code>ping 8.8.8.8 -t</code></strong> rodando num canto pra monitorar latência ao vivo</li>
         <li><strong>Co-host designado</strong> e online</li>
-        <li><strong>Lista impressa de sócios</strong> com hotkey e nome — em cima da mesa</li>
-        <li><strong>Janela do ping</strong> rodando (<code>ping 8.8.8.8 -t</code>) num canto da tela</li>
-        <li><strong>Apps fechados:</strong> Chrome, Spotify, OneDrive, Drive sync</li>
+        <li><strong>Recording ativo:</strong> Alt+R no Zoom + Start Recording no OBS</li>
+      </ol>
+
+      <h4>💻 Sistema</h4>
+      <ol>
+        <li><strong>Apps fechados:</strong> Chrome, Spotify, OneDrive, Drive sync, Steam, antivírus pesado</li>
+        <li><strong>Windows Update:</strong> pause ativado pra semana</li>
         <li><strong>Celular em silencioso</strong> (não vibração — capta no mic)</li>
+        <li><strong>Bateria do laptop</strong> (se for o caso): plugado na tomada · modo High Performance</li>
+        <li><strong>OBS encoder:</strong> NVENC (GPU) — confirmar uso da 3070 Ti em vez de CPU</li>
+      </ol>
+
+      <h4>📋 Operacional</h4>
+      <ol>
+        <li><strong>Lista impressa de sócios</strong> com hotkey e nome — em cima da mesa</li>
+        <li><strong>Pilhas alcalinas novas</strong> de reserva (pelo menos 4) na mesa</li>
+        <li><strong>Pilhas reservas</strong> dos TX wireless</li>
+        <li><strong>Cabo USB-C extra</strong> caso uma câmera Sony desconecte</li>
+        <li><strong>Splitter P2</strong> + fone com fio pra emergência de monitoramento</li>
       </ol>
 
       <div class="sos-fix">
         <div class="sos-fix-label">🎯 Mantra dos 5 segundos</div>
-        <p>Antes de clicar "ir ao vivo": <strong>respira fundo, olha o VU, olha o preview, olha o ping. Se os 4 estiverem OK, vai.</strong></p>
+        <p>Antes de clicar "ir ao vivo": <strong>respira fundo · olha o VU · olha o preview · olha o ping. Se os 4 estiverem OK, vai.</strong></p>
       </div>
     </article>
 
