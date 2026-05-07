@@ -945,6 +945,102 @@
             </div></div>
           </article>
 
+          <!-- 3.1b — Parear fones BT dos apresentadores (Galaxy Buds + AirPods) -->
+          <article class="task" data-id="3.1b">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Parear fones Bluetooth dos apresentadores no Windows</h3>
+                  <span class="badge hoje">Qui 7/5</span>
+                  <span class="badge urgente">Urgente</span>
+                </div>
+                <p class="task-desc">Apresentadores costumam chegar em cima da hora com fone novo na mão. Tutorial pronto pra cada modelo evita pânico de última hora.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <p><strong>Antes de qualquer coisa:</strong></p>
+              <ul>
+                <li>Conferir que o <strong>case do fone está carregado</strong> (LED verde/branco). Se chegar zerado, deixa carregando 10 min antes de tentar parear — fone com bateria baixa fica fora do modo de pareamento</li>
+                <li>Esquecer pareamentos antigos no Windows: <code>Settings → Bluetooth &amp; devices</code> → clicar nos 3 pontinhos do dispositivo antigo → <strong>Remove device</strong></li>
+                <li>Manter o fone <strong>a menos de 1 metro</strong> do PC durante o pareamento</li>
+                <li>Desligar Bluetooth do celular do dono temporariamente — senão o fone reconecta sozinho lá em vez de aparecer no PC</li>
+              </ul>
+
+              <p><strong>════ Galaxy Buds (Pro / Buds2 Pro / Buds2 / Buds Live / FE) ════</strong></p>
+              <ul>
+                <li><strong>1. Entrar em modo de pareamento:</strong>
+                  <ul>
+                    <li>Colocar os fones DENTRO do case e <strong>fechar a tampa</strong></li>
+                    <li>Esperar 5–6 segundos</li>
+                    <li>Abrir a tampa <strong>com os fones ainda dentro</strong> — o LED do case fica piscando azul/verde indicando "modo descoberta"</li>
+                    <li>Se não funcionar de primeira: com a tampa aberta, <strong>tocar e segurar a área touch dos dois fones simultaneamente</strong> por 3-5 segundos até ouvir o som de pareamento</li>
+                  </ul>
+                </li>
+                <li><strong>2. No Windows:</strong>
+                  <ul>
+                    <li><code>Settings → Bluetooth &amp; devices → Add device → Bluetooth</code></li>
+                    <li>Aparece <code>Galaxy Buds...</code> na lista — clicar</li>
+                    <li>Aguardar "Connected" (≈10s)</li>
+                  </ul>
+                </li>
+              </ul>
+              <div class="video-block">
+                <div class="video-wrap" data-id="pti_NSaKKAk" data-title="Como Conectar Galaxy Buds Pro / Buds 2 Pro / Buds 2 / Live no Notebook"></div>
+                <a class="video-fallback" href="https://www.youtube.com/watch?v=pti_NSaKKAk" target="_blank" rel="noopener noreferrer">↗ Abrir no YouTube se não carregar aqui</a>
+              </div>
+
+              <p><strong>════ AirPods / AirPods Pro (1ª, 2ª, 3ª gen) ════</strong></p>
+              <ul>
+                <li><strong>1. Entrar em modo de pareamento:</strong>
+                  <ul>
+                    <li>Colocar os AirPods DENTRO do case e fechar</li>
+                    <li>Abrir a tampa do case <strong>com os AirPods dentro</strong></li>
+                    <li>Pressionar e <strong>segurar o botão circular nas costas do case</strong> por ~5 segundos até a luz frontal piscar branca</li>
+                    <li>(Se a luz já estava verde quando abriu, os AirPods estão conectados em outro dispositivo — segurar mesmo assim até virar branca piscante)</li>
+                  </ul>
+                </li>
+                <li><strong>2. No Windows:</strong>
+                  <ul>
+                    <li><code>Settings → Bluetooth &amp; devices → Add device → Bluetooth</code></li>
+                    <li>Aparece <code>AirPods Pro</code> (ou <code>AirPods de [Nome]</code>) — clicar</li>
+                    <li>Aguardar "Connected"</li>
+                  </ul>
+                </li>
+              </ul>
+              <div class="video-block">
+                <div class="video-wrap" data-id="dev8UO91D1E" data-title="Como Conectar o AirPods Pro ao PC Windows"></div>
+                <a class="video-fallback" href="https://www.youtube.com/watch?v=dev8UO91D1E" target="_blank" rel="noopener noreferrer">↗ Abrir no YouTube se não carregar aqui</a>
+              </div>
+
+              <p><strong>⚠️ Pegadinha clássica do Windows com fone Bluetooth — Stereo vs Hands-Free</strong></p>
+              <p>Quando um fone BT pareia, o Windows registra <strong>DOIS dispositivos de áudio</strong>:</p>
+              <ul>
+                <li><code>AirPods Pro Stereo</code> ou <code>Galaxy Buds Stereo</code> → áudio em <strong>alta qualidade, só saída</strong> (perfeito pra monitorar a live)</li>
+                <li><code>Hands-Free AG Audio</code> → áudio em qualidade telefonema (8 kHz mono), com microfone ativo. Som FICA HORRÍVEL.</li>
+              </ul>
+              <p>O Windows escolhe automaticamente <strong>Hands-Free</strong> quando detecta um app que usa microfone (Zoom, OBS, etc) — e estraga o som.</p>
+              <p><strong>Como forçar Stereo:</strong></p>
+              <ul>
+                <li>Botão direito no ícone de som → <code>Sound settings</code> → <code>More sound settings</code></li>
+                <li>Aba <strong>Playback</strong> → clicar com botão direito no <code>Hands-Free</code> → <strong>Disable</strong> (desabilitar — não precisa remover)</li>
+                <li>Confirmar que o dispositivo ativo é o <code>Stereo</code></li>
+                <li>Repetir pra cada um dos 2 fones</li>
+              </ul>
+
+              <p><strong>Outros problemas comuns:</strong></p>
+              <ul>
+                <li><strong>Fone aparece mas não conecta:</strong> remover de "Devices", desligar/ligar Bluetooth do PC, tentar de novo</li>
+                <li><strong>"Couldn't connect":</strong> reiniciar o Bluetooth do Windows: <code>Win+R</code> → <code>services.msc</code> → procurar "Bluetooth Support Service" → Restart</li>
+                <li><strong>Áudio cortando / chiado:</strong> distância do PC, ou interferência (Wi-Fi 2.4GHz, micro-ondas, outros BT). Tirar fones próximos do roteador</li>
+                <li><strong>Latência alta (delay):</strong> inerente ao BT, ~80-150ms é normal. Se for inaceitável, plano B é fone com fio + splitter P2 (R$15)</li>
+              </ul>
+
+              <p><strong>Se os DOIS apresentadores tiverem fone BT:</strong> parear os dois primeiro AQUI, depois ir pra próxima tarefa configurar o split A1/A2 no VoiceMeeter.</p>
+            </div></div>
+          </article>
+
           <article class="task" data-id="3.2">
             <div class="task-row">
               <button class="task-check"></button>
