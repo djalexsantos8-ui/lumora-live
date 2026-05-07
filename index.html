@@ -1,0 +1,1867 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Setup — Apresentação de Novos Sócios</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+  /* ─────────── DESIGN TOKENS ─────────── */
+  :root {
+    --bg-base: #0a0a0f;
+    --bg-card: #111118;
+    --bg-card-hover: #14141d;
+    --bg-elevated: rgba(255,255,255,0.03);
+    --border: rgba(255,255,255,0.07);
+    --border-strong: rgba(255,255,255,0.12);
+
+    --text-primary: #f0f0f5;
+    --text-secondary: #8b8b9e;
+    --text-tertiary: #4a4a5e;
+
+    --accent: #6366f1;
+    --accent-glow: rgba(99,102,241,0.15);
+    --accent-secondary: #22d3ee;
+
+    --danger-bg: rgba(239,68,68,0.15);
+    --danger-fg: #f87171;
+    --danger-border: rgba(239,68,68,0.2);
+
+    --warn-bg: rgba(245,158,11,0.15);
+    --warn-fg: #fbbf24;
+
+    --success-bg: rgba(34,197,94,0.15);
+    --success-fg: #4ade80;
+
+    --risk-bg: rgba(249,115,22,0.15);
+    --risk-fg: #fb923c;
+
+    --shadow-soft: 0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2);
+    --shadow-card: 0 1px 0 rgba(255,255,255,0.04) inset, 0 8px 24px rgba(0,0,0,0.35);
+
+    --radius-lg: 20px;
+    --radius-md: 12px;
+    --radius-sm: 8px;
+
+    --ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+    --font-display: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'SF Mono', 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+  }
+
+  /* ─────────── RESET ─────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-body);
+    background: var(--bg-base);
+    color: var(--text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Ambient gradient background */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse 800px 600px at 15% -10%, rgba(99,102,241,0.08), transparent 60%),
+      radial-gradient(ellipse 600px 500px at 95% 110%, rgba(34,211,238,0.05), transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  a { color: var(--accent-secondary); text-decoration: none; transition: color 200ms var(--ease); }
+  a:hover { color: var(--accent); }
+
+  /* ─────────── LAYOUT ─────────── */
+  .shell {
+    position: relative;
+    z-index: 1;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 48px 40px 80px;
+  }
+
+  /* ─────────── HEADER ─────────── */
+  .header { margin-bottom: 56px; }
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+  .brand h1 {
+    font-family: var(--font-display);
+    font-size: 56px;
+    font-weight: 200;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 12px;
+  }
+  .brand h1 .accent {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-secondary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 300;
+  }
+  .brand p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+  .nav-pills { display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-start; }
+  .pill {
+    padding: 10px 18px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    transition: all 200ms var(--ease);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .pill:hover {
+    background: rgba(99,102,241,0.08);
+    border-color: rgba(99,102,241,0.3);
+    color: var(--text-primary);
+    transform: translateY(-1px);
+  }
+
+  /* Progress card */
+  .progress-card {
+    padding: 24px 28px;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .progress-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .progress-label { font-size: 13px; color: var(--text-secondary); font-weight: 500; }
+  .progress-numeric {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+  .progress-numeric .pct {
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--accent);
+    margin-left: 12px;
+  }
+  .progress-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent) 0%, var(--accent-secondary) 100%);
+    border-radius: 999px;
+    transition: width 500ms var(--ease);
+    box-shadow: 0 0 12px var(--accent-glow);
+  }
+
+  /* ─────────── BODY GRID ─────────── */
+  .body-grid {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 40px;
+    align-items: start;
+  }
+
+  /* ─────────── PHASES ─────────── */
+  .phase { margin-bottom: 56px; }
+  .phase:last-child { margin-bottom: 0; }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+  .phase-icon {
+    width: 44px; height: 44px;
+    display: grid; place-items: center;
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 20px;
+    backdrop-filter: blur(16px);
+  }
+  .phase-title-block { flex: 1; }
+  .phase-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-secondary);
+    margin-bottom: 4px;
+  }
+  .phase-title {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+  .phase-desc {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 8px 0 24px 60px;
+  }
+
+  /* Phase progress mini-bar */
+  .phase-meter {
+    margin: 0 0 20px 60px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+  .phase-meter-bar {
+    flex: 1;
+    height: 2px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .phase-meter-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 400ms var(--ease);
+    width: 0%;
+  }
+
+  /* ─────────── TASK CARD ─────────── */
+  .tasks { display: flex; flex-direction: column; gap: 12px; }
+  .task {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: all 250ms var(--ease);
+    box-shadow: var(--shadow-card);
+  }
+  .task:hover {
+    border-color: var(--border-strong);
+    background: var(--bg-card-hover);
+  }
+  .task.done {
+    opacity: 0.5;
+  }
+  .task.done .task-title { text-decoration: line-through; text-decoration-color: var(--text-tertiary); }
+  .task.expanded {
+    border-color: rgba(99,102,241,0.3);
+    background: var(--bg-card-hover);
+  }
+  .task-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 18px 20px;
+  }
+  .task-check {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    border: 1.5px solid var(--border-strong);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+    transition: all 200ms var(--ease);
+    margin-top: 2px;
+    position: relative;
+    display: grid;
+    place-items: center;
+  }
+  .task-check:hover { border-color: var(--accent); transform: scale(1.05); }
+  .task-check.checked {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 16px var(--accent-glow);
+  }
+  .task-check.checked::after {
+    content: '';
+    width: 11px; height: 6px;
+    border-left: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: rotate(-45deg) translate(1px, -1px);
+  }
+  .task-content { flex: 1; min-width: 0; }
+  .task-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+  }
+  .task-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    line-height: 1.4;
+  }
+  .task-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .task-toggle {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.04em;
+    padding: 4px 0;
+    transition: color 200ms var(--ease);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .task-toggle:hover { color: var(--accent); }
+  .task-toggle .arrow { transition: transform 250ms var(--ease); display: inline-block; }
+  .task.expanded .task-toggle .arrow { transform: rotate(180deg); }
+
+  /* Badges */
+  .badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid transparent;
+    flex-shrink: 0;
+  }
+  .badge.urgente { background: var(--danger-bg); color: var(--danger-fg); border-color: var(--danger-border); }
+  .badge.hoje { background: var(--warn-bg); color: var(--warn-fg); border-color: rgba(245,158,11,0.2); }
+  .badge.amanha { background: rgba(99,102,241,0.15); color: #a5b4fc; border-color: rgba(99,102,241,0.25); }
+  .badge.gratuito { background: var(--success-bg); color: var(--success-fg); border-color: rgba(34,197,94,0.2); }
+  .badge.risco { background: var(--risk-bg); color: var(--risk-fg); border-color: rgba(249,115,22,0.2); }
+  .badge.opcional { background: rgba(255,255,255,0.04); color: var(--text-tertiary); border-color: var(--border); }
+
+  /* Expandable detail panel */
+  .task-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 350ms var(--ease);
+    border-top: 1px solid transparent;
+  }
+  .task.expanded .task-detail {
+    border-top-color: var(--border);
+  }
+  .task-detail-inner {
+    padding: 20px 20px 22px 58px;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+  .task-detail-inner p { margin-bottom: 12px; }
+  .task-detail-inner p:last-child { margin-bottom: 0; }
+  .task-detail-inner strong { color: var(--text-primary); font-weight: 500; }
+  .task-detail-inner ul { margin: 8px 0 12px 0; padding-left: 18px; }
+  .task-detail-inner li { margin-bottom: 6px; }
+  .task-detail-inner code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: rgba(99,102,241,0.08);
+    color: #c7d2fe;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(99,102,241,0.15);
+  }
+  .external-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 4px 0;
+    padding: 8px 14px;
+    background: rgba(34,211,238,0.06);
+    border: 1px solid rgba(34,211,238,0.15);
+    border-radius: var(--radius-sm);
+    font-size: 12.5px;
+    color: var(--accent-secondary);
+    transition: all 200ms var(--ease);
+  }
+  .external-link:hover {
+    background: rgba(34,211,238,0.1);
+    border-color: rgba(34,211,238,0.3);
+    transform: translateY(-1px);
+  }
+  .links-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+
+  .video-block { margin-top: 16px; }
+  .video-wrap {
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: #000;
+    aspect-ratio: 16 / 9;
+    border: 1px solid var(--border);
+    position: relative;
+    cursor: pointer;
+  }
+  .video-wrap iframe { width: 100%; height: 100%; border: 0; display: block; }
+  .video-thumb {
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-color: #0c0c14;
+    transition: filter 250ms var(--ease);
+  }
+  .video-wrap:hover .video-thumb { filter: brightness(0.7); }
+  .video-play {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 64px; height: 64px;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.65);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: grid; place-items: center;
+    color: #fff;
+    font-size: 22px;
+    backdrop-filter: blur(8px);
+    transition: all 250ms var(--ease);
+    pointer-events: none;
+  }
+  .video-wrap:hover .video-play {
+    background: var(--accent);
+    border-color: var(--accent);
+    transform: translate(-50%, -50%) scale(1.08);
+    box-shadow: 0 0 24px var(--accent-glow);
+  }
+  .video-fallback {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 6px 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 11px;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+    transition: all 200ms var(--ease);
+  }
+  .video-fallback:hover { color: var(--accent-secondary); border-color: rgba(34,211,238,0.3); }
+
+  /* ─────────── SIDE PANEL ─────────── */
+  .side {
+    position: sticky;
+    top: 24px;
+  }
+  .side-card {
+    background: var(--bg-elevated);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    margin-bottom: 16px;
+  }
+  .side-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-secondary);
+    margin-bottom: 8px;
+  }
+  .side-title {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+  .signal-svg { width: 100%; height: auto; display: block; }
+  .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 14px;
+    margin-top: 18px;
+    font-size: 11px;
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* OBS scenes mini-list */
+  .scenes-list { display: flex; flex-direction: column; gap: 6px; }
+  .scene-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+  }
+  .scene-name { color: var(--text-primary); }
+  .scene-key {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-tertiary);
+    background: rgba(0,0,0,0.3);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  /* ─────────── FOOTER ─────────── */
+  .footer {
+    margin-top: 80px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+    letter-spacing: 0.04em;
+  }
+  .reset-btn {
+    padding: 10px 18px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    color: var(--text-secondary);
+    transition: all 200ms var(--ease);
+    font-family: var(--font-mono);
+  }
+  .reset-btn:hover {
+    border-color: var(--danger-fg);
+    color: var(--danger-fg);
+    background: var(--danger-bg);
+  }
+
+  /* ─────────── CONFETTI ─────────── */
+  .confetti {
+    position: absolute;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: confetti-fly 700ms var(--ease) forwards;
+  }
+  @keyframes confetti-fly {
+    0%   { transform: translate(0,0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0.4); opacity: 0; }
+  }
+
+  /* ─────────── RESPONSIVE ─────────── */
+  @media (max-width: 1100px) {
+    .body-grid { grid-template-columns: 1fr; }
+    .side { position: static; }
+  }
+  @media (max-width: 720px) {
+    .shell { padding: 32px 20px 60px; }
+    .brand h1 { font-size: 40px; }
+    .header-top { flex-direction: column; }
+    .phase-desc, .phase-meter { margin-left: 0; }
+    .task-detail-inner { padding-left: 20px; }
+  }
+
+  /* ─────────── SYNC BADGE ─────────── */
+  .sync-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 10px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    transition: all 250ms var(--ease);
+  }
+  .sync-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 8px currentColor;
+  }
+  .sync-badge.synced { color: #4ade80; border-color: rgba(74,222,128,0.25); background: rgba(74,222,128,0.06); }
+  .sync-badge.syncing { color: #fbbf24; border-color: rgba(251,191,36,0.25); background: rgba(251,191,36,0.06); }
+  .sync-badge.offline { color: #f87171; border-color: rgba(248,113,113,0.25); background: rgba(248,113,113,0.06); }
+  .sync-badge.connecting { color: var(--text-secondary); }
+  .sync-badge.syncing::before { animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ════════ HEADER ════════ -->
+  <header class="header">
+    <div class="header-top">
+      <div class="brand">
+        <h1>Live <span class="accent">Setup</span></h1>
+        <p>Apresentação de Novos Sócios — Plano de Implementação</p>
+      </div>
+      <nav class="nav-pills" aria-label="Navegação rápida">
+        <button class="pill" data-scroll="hoje">📅 Qui · 7 mai</button>
+        <button class="pill" data-scroll="amanha">📅 Sex · 8 mai</button>
+      </nav>
+    </div>
+
+    <div class="progress-card" role="region" aria-label="Progresso global">
+      <div class="progress-meta">
+        <span class="progress-label">
+          Progresso geral da implementação
+          <span class="sync-badge connecting" id="sync-badge">conectando…</span>
+        </span>
+        <span class="progress-numeric">
+          <span id="done-count">0</span> / <span id="total-count">0</span> tarefas
+          <span class="pct"><span id="pct">0</span>%</span>
+        </span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+  </header>
+
+  <!-- ════════ BODY ════════ -->
+  <div class="body-grid">
+
+    <!-- ─────── COLUMN: TASKS ─────── -->
+    <main>
+
+      <!-- ════ FASE 1 ════ -->
+      <section class="phase" id="hoje" data-phase="1">
+        <div class="phase-header">
+          <div class="phase-icon">⬇️</div>
+          <div class="phase-title-block">
+            <div class="phase-eyebrow">Fase 01 · Qui 7 mai</div>
+            <h2 class="phase-title">Instalar Software</h2>
+          </div>
+        </div>
+        <p class="phase-desc">Tudo que precisa estar no computador antes de dormir hoje.</p>
+        <div class="phase-meter"><span class="phase-meter-bar"><span class="phase-meter-fill"></span></span><span class="phase-meter-text">0/0</span></div>
+
+        <div class="tasks">
+
+          <!-- 1.1 -->
+          <article class="task" data-id="1.1">
+            <div class="task-row">
+              <button class="task-check" aria-label="Marcar tarefa concluída"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Instalar VoiceMeeter Banana</h3>
+                  <span class="badge gratuito">Gratuito</span>
+                </div>
+                <p class="task-desc">Mixer de áudio virtual que permite rotear o mesmo som para dois fones Bluetooth simultaneamente.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <p>VoiceMeeter Banana é um <strong>aplicativo de mixagem de áudio virtual gratuito</strong> (donationware — funcional 100%, sem limitações, sem marca d'água). Ele cria dispositivos de áudio virtuais no Windows que você pode rotear para múltiplas saídas físicas.</p>
+              <p>No nosso caso: <code>A1 = Fone BT 1</code>, <code>A2 = Fone BT 2</code>. Qualquer áudio que entrar pelo Virtual Input será enviado simultaneamente para os dois fones. Essencial para o monitoramento dos apresentadores sem compartilhamento de fones.</p>
+              <div class="links-row">
+                <a class="external-link" href="https://vb-audio.com/Voicemeeter/banana.htm" target="_blank" rel="noopener noreferrer">↗ Download VoiceMeeter Banana</a>
+              </div>
+              <div class="video-block">
+                <div class="video-wrap" data-id="kofucQWMOco" data-title="VoiceMeeter Banana - Como usar 2 fones/headset no PC"></div>
+                <a class="video-fallback" href="https://www.youtube.com/watch?v=kofucQWMOco" target="_blank" rel="noopener noreferrer">↗ Abrir no YouTube se não carregar aqui</a>
+              </div>
+            </div></div>
+          </article>
+
+          <!-- 1.2 -->
+          <article class="task" data-id="1.2">
+            <div class="task-row">
+              <button class="task-check" aria-label="Marcar tarefa concluída"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Instalar NDI Tools</h3>
+                  <span class="badge gratuito">Gratuito</span>
+                </div>
+                <p class="task-desc">Permite que o computador do PowerPoint transmita a tela via rede local para o OBS, sem cabos.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <p>Instalar em <strong>DOIS computadores</strong>: o PC principal (que roda o OBS) e o PC do PowerPoint.</p>
+              <ul>
+                <li>No <strong>PC do PPT</strong>: abrir <code>NDI Scan Converter</code> após instalação — ele começa a transmitir a tela automaticamente via rede local.</li>
+                <li>No <strong>PC principal</strong>: o plugin OBS-NDI (próxima tarefa) vai detectar essa fonte.</li>
+                <li>Ambos os computadores precisam estar na <strong>MESMA rede</strong> Wi-Fi ou cabo. Idealmente cabo para estabilidade.</li>
+              </ul>
+              <div class="links-row">
+                <a class="external-link" href="https://ndi.video/tools/" target="_blank" rel="noopener noreferrer">↗ Download NDI Tools — versão gratuita</a>
+              </div>
+            </div></div>
+          </article>
+
+          <!-- 1.3 -->
+          <article class="task" data-id="1.3">
+            <div class="task-row">
+              <button class="task-check" aria-label="Marcar tarefa concluída"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Instalar plugin OBS-NDI</h3>
+                  <span class="badge gratuito">Gratuito</span>
+                </div>
+                <p class="task-desc">Plugin que adiciona suporte a fontes NDI dentro do OBS Studio.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <p>Baixar a versão mais recente compatível com seu OBS. Após instalar, <strong>reiniciar o OBS</strong>.</p>
+              <p>No OBS, ao adicionar uma nova Source em qualquer cena, vai aparecer a opção <code>NDI Source</code>. Selecionar a fonte que corresponde ao PC do PowerPoint (vai aparecer com o nome do computador).</p>
+              <div class="links-row">
+                <a class="external-link" href="https://github.com/obs-ndi/obs-ndi/releases" target="_blank" rel="noopener noreferrer">↗ Releases do plugin OBS-NDI no GitHub</a>
+              </div>
+            </div></div>
+          </article>
+
+          <!-- 1.4 -->
+          <article class="task" data-id="1.4">
+            <div class="task-row">
+              <button class="task-check" aria-label="Marcar tarefa concluída"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Atualizar OBS Studio</h3>
+                  <span class="badge urgente">Urgente</span>
+                </div>
+                <p class="task-desc">Versões antigas têm bug de reconhecimento de câmeras Sony via USB.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <p>Baixar a versão mais recente em obsproject.com. Versões abaixo de <code>30.x</code> têm problemas com dispositivos UVC (webcam via USB-C) em Windows 11.</p>
+              <p>Após atualizar: <strong>Help → Check for Updates</strong> para garantir.</p>
+              <div class="links-row">
+                <a class="external-link" href="https://obsproject.com/download" target="_blank" rel="noopener noreferrer">↗ Download OBS Studio</a>
+              </div>
+            </div></div>
+          </article>
+
+          <!-- 1.5 -->
+          <article class="task" data-id="1.5">
+            <div class="task-row">
+              <button class="task-check" aria-label="Marcar tarefa concluída"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Desativar Windows Update até depois da live</h3>
+                  <span class="badge urgente">Urgente</span>
+                </div>
+                <p class="task-desc">Uma atualização automática pode reiniciar o PC no meio da transmissão.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <p><strong>Settings → Windows Update → Advanced Options → Pause updates</strong> → selecionar 1 semana. Reativar normalmente após a live.</p>
+              <p>Também desativar:</p>
+              <ul>
+                <li>OneDrive sync automático</li>
+                <li>Dropbox sync</li>
+                <li>Qualquer backup em nuvem agendado</li>
+              </ul>
+            </div></div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ════ FASE 2 ════ -->
+      <section class="phase" data-phase="2">
+        <div class="phase-header">
+          <div class="phase-icon">🎥</div>
+          <div class="phase-title-block">
+            <div class="phase-eyebrow">Fase 02 · Qui 7 mai</div>
+            <h2 class="phase-title">Configurar as Câmeras Sony</h2>
+          </div>
+        </div>
+        <p class="phase-desc">FX30 e A7S3 como webcams simultâneas via USB-C.</p>
+        <div class="phase-meter"><span class="phase-meter-bar"><span class="phase-meter-fill"></span></span><span class="phase-meter-text">0/0</span></div>
+
+        <div class="tasks">
+
+          <article class="task" data-id="2.1">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Configurar Sony FX30 para modo USB Streaming</h3>
+                  <span class="badge hoje">Qui 7/5</span>
+                </div>
+                <p class="task-desc">Ativar o modo que faz a câmera aparecer como webcam no Windows.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <ul>
+                <li>No menu da FX30: <code>Network → USB → USB Connection Mode → PC Remote</code></li>
+                <li>Depois: <code>Network → PC Remote Settings → Still Img Save Dest → Memory Card Only</code> (para não travar)</li>
+                <li>Conectar via cabo USB-C → USB-A ou USB-C → USB-C diretamente na <strong>porta TRASEIRA</strong> do gabinete (não hub, não frente)</li>
+                <li>A câmera vai aparecer no Windows como <code>Sony Camera</code> no Gerenciador de Dispositivos</li>
+                <li><strong>Resolução recomendada:</strong> 1080p / 30fps no streaming USB (suficiente para a live, menos carga no barramento USB)</li>
+              </ul>
+              <div class="links-row">
+                <a class="external-link" href="https://helpguide.sony.net/ilc/2110/v1/en/contents/TP1000253425.html" target="_blank" rel="noopener noreferrer">↗ Manual oficial Sony FX30 — USB Streaming</a>
+              </div>
+            </div></div>
+          </article>
+
+          <article class="task" data-id="2.2">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Configurar Sony A7S III para modo USB Streaming</h3>
+                  <span class="badge hoje">Qui 7/5</span>
+                </div>
+                <p class="task-desc">Mesmo processo da FX30, mas o menu é levemente diferente.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <ul>
+                <li>Menu → <code>Setup (maleta) → USB → USB Connection Mode → PC Remote</code></li>
+                <li>Conectar em outra porta USB do gabinete — idealmente em <strong>controlador USB diferente</strong> do FX30 (portas frontais vs traseiras geralmente usam controladores diferentes num i9)</li>
+                <li>Verificar no Gerenciador de Dispositivos que <strong>AMBAS aparecem como dispositivos de câmera separados</strong></li>
+                <li>Se as duas aparecerem com o mesmo nome no OBS, diferenciar pelo índice: <code>Device 0 = primeira conectada, Device 1 = segunda</code></li>
+              </ul>
+              <div class="links-row">
+                <a class="external-link" href="https://helpguide.sony.net/ilc/2120/v1/en/contents/TP1000265218.html" target="_blank" rel="noopener noreferrer">↗ Manual oficial Sony A7S III — USB Connection</a>
+              </div>
+            </div></div>
+          </article>
+
+          <article class="task" data-id="2.3">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Testar as duas câmeras simultaneamente no OBS</h3>
+                  <span class="badge hoje">Qui 7/5</span>
+                </div>
+                <p class="task-desc">Confirmar que não há conflito de USB antes do dia da live.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <ul>
+                <li>No OBS: criar uma cena de teste, adicionar dois <code>Video Capture Device</code></li>
+                <li>Se uma câmera aparecer preta ou com erro: <strong>mudar para outra porta USB</strong> do gabinete</li>
+                <li>Checar no Gerenciador de Tarefas (aba Performance → GPU) se o preview está usando a GPU (deve estar, com 3070 Ti)</li>
+                <li>Configurar resolução/FPS no OBS para cada fonte: <code>1920x1080, 30fps, formato MJPEG</code> (mais eficiente que YUY2 em USB)</li>
+              </ul>
+              <div class="video-block">
+                <div class="video-wrap" data-id="B3td9338mIU" data-title="OBS Studio Tutorial: Como Configurar Duas Câmeras"></div>
+                <a class="video-fallback" href="https://www.youtube.com/watch?v=B3td9338mIU" target="_blank" rel="noopener noreferrer">↗ Abrir no YouTube se não carregar aqui</a>
+              </div>
+            </div></div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ════ FASE 3 ════ -->
+      <section class="phase" data-phase="3">
+        <div class="phase-header">
+          <div class="phase-icon">🎚️</div>
+          <div class="phase-title-block">
+            <div class="phase-eyebrow">Fase 03 · Qui 7 mai</div>
+            <h2 class="phase-title">Configurar Áudio</h2>
+          </div>
+        </div>
+        <p class="phase-desc">Zoom H6 como interface, VoiceMeeter como roteador, dois BT como monitores.</p>
+        <div class="phase-meter"><span class="phase-meter-bar"><span class="phase-meter-fill"></span></span><span class="phase-meter-text">0/0</span></div>
+
+        <div class="tasks">
+
+          <article class="task" data-id="3.1">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Configurar Zoom H6 como interface de áudio padrão</h3>
+                  <span class="badge hoje">Qui 7/5</span>
+                </div>
+                <p class="task-desc">Definir o H6 como entrada e saída de áudio do Windows.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <ul>
+                <li>Conectar o H6 via USB. Ele aparece como <code>Zoom H6</code> no Windows — sem driver adicional necessário.</li>
+                <li>Botão direito no ícone de som da barra de tarefas → <strong>Sound Settings</strong></li>
+                <li><strong>Output:</strong> pode ficar na saída da placa-mãe OU no H6 (depende de onde os fones dos apresentadores vão conectar fisicamente)</li>
+                <li><strong>Input:</strong> definir como <code>Zoom H6</code> — essa é a entrada dos microfones para o OBS</li>
+              </ul>
+              <p><strong>IMPORTANTE:</strong> clicar em <em>Properties</em> do dispositivo H6 → alterar sample rate para <code>48000 Hz, 24 bits</code>. Isso evita o bug clássico de o H6 "sumir" do Windows por conflito de sample rate.</p>
+            </div></div>
+          </article>
+
+          <article class="task" data-id="3.2">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Configurar VoiceMeeter Banana para dois Bluetooth</h3>
+                  <span class="badge hoje">Qui 7/5</span>
+                </div>
+                <p class="task-desc">Rotear o áudio do Zoom para os dois fones BT simultaneamente.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <ul>
+                <li>Parear os dois fones BT no Windows <strong>antes</strong> de abrir o VoiceMeeter (Settings → Bluetooth)</li>
+                <li>Abrir VoiceMeeter Banana. No canto superior direito:
+                  <ul>
+                    <li><code>Hardware Out A1</code> → selecionar Fone BT 1</li>
+                    <li><code>Hardware Out A2</code> → selecionar Fone BT 2</li>
+                  </ul>
+                </li>
+                <li>Na faixa <strong>Virtual Input</strong> (centro): clicar nos botões A1 e A2 para ativar roteamento para ambos</li>
+                <li>No Windows: Sound Settings → Output → selecionar <code>VoiceMeeter Input</code> como padrão</li>
+                <li>No OBS: Audio Settings → Monitoring Device → <code>VoiceMeeter Aux Input</code> (assim você também consegue monitorar o mix do OBS)</li>
+              </ul>
+              <div class="links-row">
+                <a class="external-link" href="https://vb-audio.com/Voicemeeter/VoicemeeterBanana_UserManual.pdf" target="_blank" rel="noopener noreferrer">↗ Manual completo VoiceMeeter Banana (PDF)</a>
+              </div>
+              <div class="video-block">
+                <div class="video-wrap" data-id="0EjDL3BgPk4" data-title="Como configurar VoiceMeeter Banana e separar faixas de áudio"></div>
+                <a class="video-fallback" href="https://www.youtube.com/watch?v=0EjDL3BgPk4" target="_blank" rel="noopener noreferrer">↗ Abrir no YouTube se não carregar aqui</a>
+              </div>
+            </div></div>
+          </article>
+
+          <article class="task" data-id="3.3">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Configurar áudio no OBS</h3>
+                  <span class="badge hoje">Qui 7/5</span>
+                </div>
+                <p class="task-desc">Garantir que o H6 seja a entrada de áudio e o mix chegue correto no Zoom.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <p>OBS → <strong>Settings → Audio</strong>:</p>
+              <ul>
+                <li><code>Sample Rate: 48 kHz</code> (deve coincidir com o H6)</li>
+                <li><code>Channels: Stereo</code></li>
+                <li><strong>Desktop Audio:</strong> <code>VoiceMeeter Output</code> (captura o retorno do Zoom)</li>
+                <li><strong>Mic/Auxiliary Audio:</strong> <code>Zoom H6</code> (entrada dos microfones)</li>
+              </ul>
+              <p>No mixer do OBS: verificar que o H6 não está clipando (picos vermelhos). <strong>Ajustar gain no próprio H6, não no OBS.</strong></p>
+              <p>Ativar Audio Monitoring no OBS para a faixa do Desktop Audio (engrenagem na faixa → Advanced Audio → <code>Monitor Only</code>) — isso manda o retorno para os fones via VoiceMeeter.</p>
+            </div></div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ════ FASE 4 ════ -->
+      <section class="phase" data-phase="4">
+        <div class="phase-header">
+          <div class="phase-icon">🎬</div>
+          <div class="phase-title-block">
+            <div class="phase-eyebrow">Fase 04 · Qui 7 mai</div>
+            <h2 class="phase-title">Montar Cenas no OBS</h2>
+          </div>
+        </div>
+        <p class="phase-desc">Criar a arquitetura de cenas que vai ser usada ao vivo amanhã.</p>
+        <div class="phase-meter"><span class="phase-meter-bar"><span class="phase-meter-fill"></span></span><span class="phase-meter-text">0/0</span></div>
+
+        <div class="tasks">
+
+          <article class="task" data-id="4.1">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Criar Scene Collection "Live Sócios"</h3>
+                  <span class="badge hoje">Qui 7/5</span>
+                </div>
+                <p class="task-desc">Isolar essa configuração para não bagunçar outras cenas já existentes no OBS.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <p>OBS → <strong>Scene Collection → New</strong> → nomear <code>Live Sócios 2025</code>. Isso cria um ambiente limpo, separado de qualquer outra configuração existente.</p>
+            </div></div>
+          </article>
+
+          <article class="task" data-id="4.2">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Criar cenas base de câmera</h3>
+                  <span class="badge hoje">Qui 7/5</span>
+                </div>
+                <p class="task-desc">As cenas fixas de câmera que serão usadas durante a apresentação.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <p>Criar as seguintes cenas (botão + no painel de Scenes):</p>
+              <ul>
+                <li><code>CAM1 - Principal</code> → Video Capture Device (FX30) em full frame</li>
+                <li><code>CAM2 - Close</code> → Video Capture Device (A7S3) em full frame</li>
+                <li><code>CAM1 + CAM2</code> → FX30 grande + A7S3 em PiP (canto inferior direito, 320x180)</li>
+                <li><code>Apresentação PPT</code> → NDI Source apontando para o PC do PowerPoint</li>
+                <li><code>Aguarde</code> → Image Source com tela de espera (texto + logo)</li>
+              </ul>
+              <p><strong>Hotkeys:</strong> Settings → Hotkeys → para cada cena, definir tecla de atalho (ex: F1–F5).</p>
+            </div></div>
+          </article>
+
+          <article class="task" data-id="4.3">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Criar as 20 cenas de animação de sócios</h3>
+                  <span class="badge hoje">Qui 7/5</span>
+                </div>
+                <p class="task-desc">Uma cena por sócio, cada uma com o arquivo de vídeo correspondente.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <ul>
+                <li><strong>Organizar arquivos:</strong> criar pasta <code>C:\LiveSocios\Animacoes\</code> e nomear: <code>socio_01.mp4 ... socio_20.mp4</code></li>
+                <li>Para cada sócio: criar cena <code>SÓCIO 01 — [Nome]</code>, adicionar <code>Media Source</code> → apontar para o arquivo correto</li>
+                <li>Em cada Media Source: <strong>marcar</strong> "Restart playback when source becomes active" e <strong>DESMARCAR</strong> "Loop"</li>
+                <li><strong>Hotkeys:</strong> <code>Num1–Num0</code> para sócios 1–10, <code>Shift+Num1–Num0</code> para sócios 11–20</li>
+              </ul>
+              <p><strong>Dica:</strong> adicionar também uma fonte de Audio em cada cena de animação se os vídeos tiverem áudio — verificar volume no mixer.</p>
+            </div></div>
+          </article>
+
+          <article class="task" data-id="4.4">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Configurar transições</h3>
+                  <span class="badge hoje">Qui 7/5</span>
+                </div>
+                <p class="task-desc">Transições suaves entre câmeras e animações.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <p>OBS → <strong>Scene Transitions</strong> (parte de baixo do painel de cenas):</p>
+              <ul>
+                <li><strong>Câmera → Câmera:</strong> <code>Fade, 200ms</code></li>
+                <li><strong>Câmera → Animação:</strong> <code>Cut (0ms)</code> — o vídeo começa imediatamente, sem fade que pareceria estranho</li>
+                <li><strong>Animação → Câmera:</strong> <code>Fade, 300ms</code> — sensação de encerramento da animação</li>
+              </ul>
+            </div></div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ════ FASE 5 ════ -->
+      <section class="phase" id="amanha" data-phase="5">
+        <div class="phase-header">
+          <div class="phase-icon">🔧</div>
+          <div class="phase-title-block">
+            <div class="phase-eyebrow">Fase 05 · Sex 8 mai · Manhã</div>
+            <h2 class="phase-title">Setup Físico no Estúdio</h2>
+          </div>
+        </div>
+        <p class="phase-desc">Chegou no estúdio: cabo de rede, luzes, câmeras, microfones, slides — sair com tudo testado antes da live.</p>
+        <div class="phase-meter"><span class="phase-meter-bar"><span class="phase-meter-fill"></span></span><span class="phase-meter-text">0/0</span></div>
+
+        <div class="tasks">
+
+          <!-- 5.0a — Cabo de rede + ping (PRIMEIRA COISA AO CHEGAR) -->
+          <article class="task" data-id="5.0a">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Testar cabo de rede e qualidade da conexão</h3>
+                  <span class="badge amanha">Sex 8/5</span>
+                  <span class="badge urgente">Urgente</span>
+                </div>
+                <p class="task-desc">Conexão estável é o que separa "live profissional" de "live travada". Cabo &gt; Wi-Fi, sempre.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <p><strong>Conectar o PC principal via cabo Ethernet</strong> direto no roteador. Nada de Wi-Fi se for evitável.</p>
+              <p><strong>Métricas mínimas pra Zoom 1080p estável:</strong></p>
+              <ul>
+                <li>Upload: <code>≥ 5 Mbps</code> sustentado · ideal <code>10+ Mbps</code></li>
+                <li>Ping: <code>&lt; 50ms</code> pro servidor mais próximo</li>
+                <li>Jitter (variação): <code>&lt; 30ms</code></li>
+              </ul>
+              <p><strong>Como testar (na ordem):</strong></p>
+              <ul>
+                <li><strong>Fast.com</strong> → mostra upload e download. Clicar em "Show more info" pra ver upload.</li>
+                <li><strong>Speedtest.net</strong> → mostra ping e jitter detalhados.</li>
+                <li><strong>Monitorar latência durante a live:</strong> abrir <code>cmd</code> e rodar <code>ping 8.8.8.8 -t</code>. Deixar correndo num canto da tela. Se pular pra &gt;100ms ou perder pacote, é hora de reagir.</li>
+              </ul>
+              <p><strong>Como melhorar ping antes da live:</strong></p>
+              <ul>
+                <li>Fechar tudo que consome banda: OneDrive, Dropbox, Google Drive sync, Steam, downloads, streaming em outros aparelhos da casa</li>
+                <li>Desligar VPN se estiver ativa</li>
+                <li>Windows: <code>Settings → Network → Wi-Fi → Properties</code> — desligar "Metered connection"</li>
+                <li>Se Wi-Fi for inevitável: usar banda <strong>5GHz</strong>, ficar perto do roteador, sem parede no caminho</li>
+              </ul>
+              <p><strong>Plano B se tudo falhar:</strong> tetherar do celular em 5G/4G. Testar antes pra saber se a operadora sustenta.</p>
+              <div class="links-row">
+                <a class="external-link" href="https://fast.com" target="_blank" rel="noopener noreferrer">↗ Fast.com — teste rápido (sem ads)</a>
+                <a class="external-link" href="https://www.speedtest.net" target="_blank" rel="noopener noreferrer">↗ Speedtest.net — ping + jitter</a>
+                <a class="external-link" href="https://packetlosstest.com" target="_blank" rel="noopener noreferrer">↗ Packet Loss Test</a>
+              </div>
+            </div></div>
+          </article>
+
+          <!-- 5.0b — Luzes -->
+          <article class="task" data-id="5.0b">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Montar e ajustar iluminação</h3>
+                  <span class="badge amanha">Sex 8/5</span>
+                </div>
+                <p class="task-desc">Setup 3 pontos é o padrão profissional — sem isso, qualquer câmera de R$30k parece amadora.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <p><strong>Setup clássico de 3 pontos:</strong></p>
+              <ul>
+                <li><strong>Key light</strong> (luz principal): frontal-lateral a <code>45°</code> do apresentador, ligeiramente acima da linha dos olhos. É a luz que define o rosto.</li>
+                <li><strong>Fill light</strong> (luz de preenchimento): oposta ao key, com <code>~50% da intensidade</code>. Suaviza as sombras criadas pelo key.</li>
+                <li><strong>Back light</strong> / hair light: atrás do apresentador, ilumina ombros e cabelo. Separa visualmente do fundo, dá profundidade.</li>
+              </ul>
+              <p><strong>Temperatura de cor:</strong> <code>4500–5600K</code> (luz neutra/dia). <strong>Todas as luzes na mesma temperatura</strong> — não misturar quente (3000K) com fria (6500K), o branco da câmera fica dançando.</p>
+              <p><strong>Difusor é obrigatório:</strong> softbox, guarda-chuva, ou rebatedor branco. Luz dura no rosto cria sombras agressivas e marca olheiras.</p>
+              <p><strong>Cuidado com óculos:</strong> se algum apresentador usa óculos, posicionar key light um pouco mais alto e mais lateral pra evitar reflexo na lente. Testar e ajustar enquanto vê o preview no OBS.</p>
+              <p><strong>Ajustar pelo OBS, não pelo olho:</strong> o que parece "OK" a olho nu pode estar overexposto na câmera (rosto estourado). Confiar no preview.</p>
+              <p><strong>Fundo:</strong> ter pelo menos 1 metro de distância entre o apresentador e a parede de fundo. Evita sombra projetada e dá separação.</p>
+            </div></div>
+          </article>
+
+        <!-- 5.1 (existente) — Posicionar câmeras -->
+          <article class="task" data-id="5.1">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Posicionar câmeras e verificar enquadramento</h3>
+                  <span class="badge amanha">Sex 8/5</span>
+                </div>
+                <p class="task-desc">FX30 no plano aberto, A7S3 no close — ajustar foco antes de começar.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <ul>
+                <li><strong>Iluminação:</strong> a câmera vai compensar automaticamente (Auto ISO), mas se possível adicionar luz frontal difusa</li>
+                <li><strong>FX30:</strong> Auto Focus com Eye Tracking se disponível — mantém apresentadores focados</li>
+                <li><strong>A7S3:</strong> foco contínuo ativado</li>
+                <li>No OBS: verificar preview da cena <code>CAM1 + CAM2</code> para confirmar enquadramento e exposição</li>
+              </ul>
+            </div></div>
+          </article>
+
+          <!-- 5.1b — Microfones + soundcheck -->
+          <article class="task" data-id="5.1b">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Conectar microfones e fazer soundcheck</h3>
+                  <span class="badge amanha">Sex 8/5</span>
+                  <span class="badge urgente">Urgente</span>
+                </div>
+                <p class="task-desc">Áudio ruim mata uma live mais rápido que vídeo ruim — ninguém aguenta 5 minutos de chiado.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <p><strong>Conectar nos canais do Zoom H6:</strong></p>
+              <ul>
+                <li>Apresentador 1 → <code>CH1</code> (lapela ou direcional)</li>
+                <li>Apresentador 2 → <code>CH2</code></li>
+                <li>Cabos XLR ou TRS conforme o tipo do mic</li>
+              </ul>
+              <p><strong>Phantom power (+48V):</strong> ligar SÓ se o mic for condensador. A maioria dos lapelas profissionais usa pilha própria. Mics dinâmicos e shotguns alimentados por pilha NÃO precisam — phantom em mic dinâmico não estraga, mas é desnecessário.</p>
+              <p><strong>Soundcheck — protocolo de 60 segundos:</strong></p>
+              <ul>
+                <li>Pedir cada apresentador falar <strong>30s em volume normal</strong> de apresentação (não cochichando, não gritando)</li>
+                <li>Ajustar <strong>gain no próprio H6</strong> até pico ficar em <code>-6 dB</code>, com média em <code>-12 a -18 dB</code></li>
+                <li><strong>NÃO ajustar gain no OBS</strong> — sempre na fonte. Subir volume no OBS amplifica o ruído junto com a voz.</li>
+              </ul>
+              <p><strong>Verificar no mixer do OBS:</strong></p>
+              <ul>
+                <li>Picos não passam de <code>-6 dB</code> (zona amarela)</li>
+                <li>Sem ruído de fundo audível (se houver, mover mic, isolar fonte do ruído — ar-condicionado, ventilador, geladeira na parede)</li>
+                <li>Os dois canais balanceados — volume parecido entre os apresentadores</li>
+              </ul>
+              <p><strong>Compressão suave (recomendado):</strong> em cada canal de mic no OBS, adicionar <code>Filter → Compressor</code>:</p>
+              <ul>
+                <li>Ratio: <code>3:1</code></li>
+                <li>Threshold: <code>-18 dB</code></li>
+                <li>Attack: <code>10 ms</code> · Release: <code>100 ms</code></li>
+                <li>Output gain: <code>+3 dB</code></li>
+              </ul>
+              <p>Isso evita que picos quando alguém empolgar estourem o áudio.</p>
+              <p><strong>Plano B:</strong> ter um mic backup (USB ou outro lapela) na bolsa. Se um cair, troca em 30s sem parar a live.</p>
+            </div></div>
+          </article>
+
+          <!-- 5.1c — Configurar PPT + NDI -->
+          <article class="task" data-id="5.1c">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Configurar PowerPoint e NDI no PC do apresentador</h3>
+                  <span class="badge amanha">Sex 8/5</span>
+                </div>
+                <p class="task-desc">Slides via NDI vão direto pro OBS sem cabo HDMI atravessando o estúdio.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <p><strong>No PC do PowerPoint:</strong></p>
+              <ul>
+                <li>Abrir o arquivo <code>.pptx</code> da apresentação</li>
+                <li><strong>DESATIVAR Modo Apresentador (Presenter View):</strong> Slide Show → desmarcar "Use Presenter View". Se ficar ativo, o NDI captura a tela com notas em vez do slide cheio.</li>
+                <li>Resolução de saída: <code>1920×1080</code> (mesma do OBS) — Display Settings → Resolution</li>
+                <li>Se for monitor secundário: configurar <code>Show on monitor X</code> apontando pra tela que o NDI Scan Converter está capturando</li>
+              </ul>
+              <p><strong>Abrir NDI Scan Converter:</strong></p>
+              <ul>
+                <li>Ícone na bandeja do sistema (taskbar, canto direito)</li>
+                <li>Selecionar a tela onde o PPT vai rodar em fullscreen</li>
+                <li>Confirmar que o nome do PC aparece na lista de fontes NDI</li>
+              </ul>
+              <p><strong>No PC principal (OBS):</strong></p>
+              <ul>
+                <li>Abrir cena <code>Apresentação PPT</code> → confirmar que NDI Source mostra o slide certo</li>
+                <li>Apertar <code>F4</code> e ver se a transição funciona</li>
+                <li>Se aparecer "No Source" no NDI, verificar firewall do Windows nos dois PCs (NDI usa portas 5353, 5960-5990)</li>
+              </ul>
+              <p><strong>Teste real — rodar 5 slides aleatórios:</strong></p>
+              <ul>
+                <li>Sincronia: delay entre clicar "próximo" e aparecer no OBS deve ser <code>&lt; 500ms</code></li>
+                <li>Sem flicker, sem cortes, sem tearing</li>
+                <li>Texto pequeno legível (não pixelado)</li>
+              </ul>
+              <p><strong>Plano B se NDI falhar:</strong> ter cabo HDMI longo + placa de captura USB (Elgato Cam Link ou similar). Plugar HDMI do PC do PPT na placa, capturar via Video Capture Device no OBS.</p>
+            </div></div>
+          </article>
+
+          <article class="task" data-id="5.2">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Ensaio completo com o Zoom</h3>
+                  <span class="badge amanha">Sex 8/5</span>
+                </div>
+                <p class="task-desc">Entrar na reunião Zoom de teste e validar vídeo + áudio chegando corretos.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <ul>
+                <li>No Zoom: Settings → Video → selecionar <code>OBS Virtual Camera</code> (ativar no OBS: <strong>Start Virtual Camera</strong>)</li>
+                <li>Settings → Audio → Microphone → <code>VoiceMeeter Output</code> (ou H6 diretamente)</li>
+                <li><strong>DESATIVAR no Zoom:</strong>
+                  <ul>
+                    <li>"Suppress background noise"</li>
+                    <li>"Automatically adjust microphone volume"</li>
+                    <li>"Touch up my appearance"</li>
+                  </ul>
+                </li>
+              </ul>
+              <p>Esses processamentos do Zoom <strong>degradam a qualidade</strong> do H6. Pedir para alguém entrar na reunião de teste e confirmar vídeo/áudio.</p>
+            </div></div>
+          </article>
+
+          <article class="task" data-id="5.3">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Testar sequência completa das animações</h3>
+                  <span class="badge amanha">Sex 8/5</span>
+                </div>
+                <p class="task-desc">Disparar todas as 20 animações em ordem para confirmar arquivos e hotkeys.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <p>Simular o fluxo real: <code>CAM1 (apresentador fala) → SÓCIO 01 (animação roda) → CAM1 (volta câmera) → SÓCIO 02...</code></p>
+              <ul>
+                <li>Confirmar que cada animação abre, roda completa e <strong>para</strong> (não fica em loop)</li>
+                <li>Verificar áudio de cada animação no mixer do OBS</li>
+                <li>Ter uma <strong>lista impressa</strong> com: número do sócio, nome, hotkey correspondente — backup físico</li>
+              </ul>
+            </div></div>
+          </article>
+
+          <article class="task" data-id="5.4">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Verificar monitoramento dos apresentadores</h3>
+                  <span class="badge amanha">Sex 8/5</span>
+                  <span class="badge risco">Risco</span>
+                </div>
+                <p class="task-desc">Confirmar que os dois fones BT estão recebendo o áudio sem problemas.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <ul>
+                <li>Com a reunião Zoom aberta, verificar que o áudio chega nos <strong>dois fones</strong></li>
+                <li>Se um fone tiver delay muito perceptível: isso é inerente ao Bluetooth. Para live de apresentação (não dublagem) um delay de <strong>80–150ms é tolerável</strong>. Se for inaceitável, usar fone com fio + splitter P2 como plano B.</li>
+                <li><strong>Ter um cabo P2 splitter disponível como backup físico</strong> — custa R$15 e resolve qualquer problema de BT</li>
+              </ul>
+            </div></div>
+          </article>
+
+          <article class="task" data-id="5.5">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Fechar apps e processos desnecessários</h3>
+                  <span class="badge urgente">Urgente</span>
+                </div>
+                <p class="task-desc">Liberar CPU/RAM/GPU para OBS + Zoom.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <p><strong>Fechar:</strong> Chrome, Spotify, OneDrive, Google Drive Sync, Teams (se não for usar), qualquer antivírus pesado.</p>
+              <ul>
+                <li>No OBS: Settings → Output → Encoder → <code>NVENC H.264</code> (usa a 3070 Ti em vez da CPU — essencial com duas câmeras + Zoom rodando)</li>
+                <li>Bitrate de streaming para Zoom: <code>4500 kbps</code> é suficiente para 1080p30</li>
+                <li>Verificar no Gerenciador de Tarefas que a GPU está sendo usada pelo OBS (coluna GPU deve mostrar atividade no processo <code>obs64.exe</code>)</li>
+              </ul>
+            </div></div>
+          </article>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ─────── COLUMN: SIDE ─────── -->
+    <aside class="side" aria-label="Painel de contexto">
+
+      <div class="side-card">
+        <div class="side-eyebrow">Arquitetura de Sinais</div>
+        <h3 class="side-title">Fluxo de vídeo e áudio</h3>
+        <svg class="signal-svg" viewBox="0 0 380 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de fluxo de sinais">
+          <defs>
+            <linearGradient id="cam-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#6366f1"/>
+              <stop offset="100%" stop-color="#4f46e5"/>
+            </linearGradient>
+            <linearGradient id="aud-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#22d3ee"/>
+              <stop offset="100%" stop-color="#0891b2"/>
+            </linearGradient>
+            <linearGradient id="dest-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#4ade80"/>
+              <stop offset="100%" stop-color="#16a34a"/>
+            </linearGradient>
+            <filter id="glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          </defs>
+
+          <!-- Connections -->
+          <g stroke="#6366f1" stroke-width="1.5" fill="none" opacity="0.55" stroke-dasharray="3 3">
+            <path d="M 80 50 L 175 110"/>
+            <path d="M 80 110 L 175 110"/>
+          </g>
+          <g stroke="#22d3ee" stroke-width="1.5" fill="none" opacity="0.55" stroke-dasharray="3 3">
+            <path d="M 80 175 L 175 175"/>
+            <path d="M 175 215 L 175 250"/>
+            <path d="M 100 295 L 145 295"/>
+            <path d="M 230 295 L 275 295"/>
+          </g>
+          <g stroke="#8b5cf6" stroke-width="1.5" fill="none" opacity="0.55" stroke-dasharray="3 3">
+            <path d="M 80 380 L 175 380"/>
+            <path d="M 175 380 L 175 145"/>
+          </g>
+          <g stroke="#4ade80" stroke-width="2" fill="none" opacity="0.7">
+            <path d="M 270 110 L 350 110"/>
+          </g>
+
+          <!-- FX30 -->
+          <g transform="translate(20,32)">
+            <rect width="60" height="36" rx="8" fill="url(#cam-grad)" filter="url(#glow)"/>
+            <text x="30" y="16" text-anchor="middle" fill="#fff" font-family="SF Mono,monospace" font-size="9" font-weight="600">FX30</text>
+            <text x="30" y="28" text-anchor="middle" fill="#e0e7ff" font-family="SF Mono,monospace" font-size="7">USB-C</text>
+          </g>
+          <!-- A7S3 -->
+          <g transform="translate(20,92)">
+            <rect width="60" height="36" rx="8" fill="url(#cam-grad)" filter="url(#glow)"/>
+            <text x="30" y="16" text-anchor="middle" fill="#fff" font-family="SF Mono,monospace" font-size="9" font-weight="600">A7S III</text>
+            <text x="30" y="28" text-anchor="middle" fill="#e0e7ff" font-family="SF Mono,monospace" font-size="7">USB-C</text>
+          </g>
+          <!-- H6 -->
+          <g transform="translate(20,157)">
+            <rect width="60" height="36" rx="8" fill="url(#aud-grad)" filter="url(#glow)"/>
+            <text x="30" y="16" text-anchor="middle" fill="#022" font-family="SF Mono,monospace" font-size="9" font-weight="600">Zoom H6</text>
+            <text x="30" y="28" text-anchor="middle" fill="#0e7490" font-family="SF Mono,monospace" font-size="7">USB</text>
+          </g>
+
+          <!-- PC + OBS (central) -->
+          <g transform="translate(175,90)">
+            <rect width="95" height="50" rx="10" fill="#1f1f2c" stroke="#6366f1" stroke-width="1.5"/>
+            <text x="47" y="22" text-anchor="middle" fill="#f0f0f5" font-family="Outfit,sans-serif" font-size="11" font-weight="500">PC i9 + OBS</text>
+            <text x="47" y="38" text-anchor="middle" fill="#8b8b9e" font-family="SF Mono,monospace" font-size="8">3070 Ti · NVENC</text>
+          </g>
+
+          <!-- VoiceMeeter -->
+          <g transform="translate(135,250)">
+            <rect width="110" height="44" rx="10" fill="#0f1419" stroke="#22d3ee" stroke-width="1.5"/>
+            <text x="55" y="20" text-anchor="middle" fill="#f0f0f5" font-family="Outfit,sans-serif" font-size="11" font-weight="500">VoiceMeeter</text>
+            <text x="55" y="34" text-anchor="middle" fill="#8b8b9e" font-family="SF Mono,monospace" font-size="8">A1 · A2 split</text>
+          </g>
+
+          <!-- BT Fones -->
+          <g transform="translate(35,275)">
+            <rect width="65" height="38" rx="10" fill="rgba(34,211,238,0.12)" stroke="#22d3ee" stroke-width="1"/>
+            <text x="32" y="17" text-anchor="middle" fill="#22d3ee" font-family="SF Mono,monospace" font-size="9" font-weight="600">BT 1</text>
+            <text x="32" y="29" text-anchor="middle" fill="#67e8f9" font-family="SF Mono,monospace" font-size="7">Fone A</text>
+          </g>
+          <g transform="translate(275,275)">
+            <rect width="65" height="38" rx="10" fill="rgba(34,211,238,0.12)" stroke="#22d3ee" stroke-width="1"/>
+            <text x="32" y="17" text-anchor="middle" fill="#22d3ee" font-family="SF Mono,monospace" font-size="9" font-weight="600">BT 2</text>
+            <text x="32" y="29" text-anchor="middle" fill="#67e8f9" font-family="SF Mono,monospace" font-size="7">Fone B</text>
+          </g>
+
+          <!-- PC PowerPoint -->
+          <g transform="translate(20,360)">
+            <rect width="60" height="40" rx="8" fill="rgba(139,92,246,0.15)" stroke="#a78bfa" stroke-width="1"/>
+            <text x="30" y="18" text-anchor="middle" fill="#c4b5fd" font-family="SF Mono,monospace" font-size="8" font-weight="600">PC PPT</text>
+            <text x="30" y="30" text-anchor="middle" fill="#a78bfa" font-family="SF Mono,monospace" font-size="7">NDI Tx</text>
+          </g>
+          <text x="135" y="378" fill="#a78bfa" font-family="SF Mono,monospace" font-size="8">NDI · LAN</text>
+
+          <!-- ZOOM (destination) -->
+          <g transform="translate(290,90)">
+            <rect width="80" height="50" rx="10" fill="url(#dest-grad)" filter="url(#glow)"/>
+            <text x="40" y="22" text-anchor="middle" fill="#022c1c" font-family="Outfit,sans-serif" font-size="11" font-weight="600">ZOOM</text>
+            <text x="40" y="38" text-anchor="middle" fill="#052e1d" font-family="SF Mono,monospace" font-size="8">Virtual Cam</text>
+          </g>
+
+          <!-- Final destination -->
+          <g transform="translate(125,420)">
+            <text x="65" y="14" text-anchor="middle" fill="#4ade80" font-family="Outfit,sans-serif" font-size="11">→ Participantes</text>
+          </g>
+        </svg>
+
+        <div class="legend">
+          <div class="legend-item"><span class="legend-dot" style="background:#6366f1"></span>Vídeo (câmera)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#22d3ee"></span>Áudio</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#a78bfa"></span>NDI / Rede</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#4ade80"></span>Destino final</div>
+        </div>
+      </div>
+
+      <div class="side-card">
+        <div class="side-eyebrow">OBS · Cenas + Hotkeys</div>
+        <h3 class="side-title">Mapa de teclas ao vivo</h3>
+        <div class="scenes-list">
+          <div class="scene-item"><span class="scene-name">CAM1 — Principal</span><span class="scene-key">F1</span></div>
+          <div class="scene-item"><span class="scene-name">CAM2 — Close</span><span class="scene-key">F2</span></div>
+          <div class="scene-item"><span class="scene-name">CAM1 + CAM2 (PiP)</span><span class="scene-key">F3</span></div>
+          <div class="scene-item"><span class="scene-name">Apresentação PPT</span><span class="scene-key">F4</span></div>
+          <div class="scene-item"><span class="scene-name">Aguarde</span><span class="scene-key">F5</span></div>
+          <div class="scene-item"><span class="scene-name">Sócios 1–10</span><span class="scene-key">Num1-0</span></div>
+          <div class="scene-item"><span class="scene-name">Sócios 11–20</span><span class="scene-key">⇧+Num1-0</span></div>
+        </div>
+      </div>
+
+    </aside>
+  </div>
+
+  <!-- ════════ FOOTER ════════ -->
+  <footer class="footer">
+    <div class="footer-meta">
+      Última atualização · <span id="last-update">2026-05-07</span> &nbsp;·&nbsp; Estado salvo localmente
+    </div>
+    <button class="reset-btn" id="reset-btn">↻ Resetar progresso</button>
+  </footer>
+
+</div>
+
+<script>
+(() => {
+  /* ─────────── SUPABASE CONFIG ─────────── */
+  const SUPABASE_URL = 'https://jvljillpvlzhrphajfio.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_IbyYvhMbn_Vi117G1YNPQg_gzRyoygY';
+  const TABLE = 'svn_live_2026_state';
+  const STORAGE_KEY = 'live-setup-state-v2';
+
+  const sb = window.supabase
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+        realtime: { params: { eventsPerSecond: 5 } }
+      })
+    : null;
+
+  /* ─────────── SYNC STATUS ─────────── */
+  const badge = document.getElementById('sync-badge');
+  const setStatus = (s, label) => {
+    if (!badge) return;
+    badge.className = 'sync-badge ' + s;
+    badge.textContent = label;
+  };
+  setStatus('connecting', 'conectando…');
+
+  /* ─────────── STATE (com cache local pra modo offline) ─────────── */
+  const loadLocal = () => {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); }
+    catch { return {}; }
+  };
+  const saveLocal = (s) => localStorage.setItem(STORAGE_KEY, JSON.stringify(s));
+  let state = loadLocal();
+  let suppressNextRender = false;
+
+  /* ─────────── ELEMENTS ─────────── */
+  const tasks = document.querySelectorAll('.task');
+  const phases = document.querySelectorAll('.phase');
+  const totalEl = document.getElementById('total-count');
+  const doneEl = document.getElementById('done-count');
+  const pctEl = document.getElementById('pct');
+  const fillEl = document.getElementById('progress-fill');
+
+  totalEl.textContent = tasks.length;
+
+  /* ─────────── PROGRESS ─────────── */
+  const updateProgress = () => {
+    const done = document.querySelectorAll('.task.done').length;
+    const pct = tasks.length ? Math.round((done / tasks.length) * 100) : 0;
+    doneEl.textContent = done;
+    pctEl.textContent = pct;
+    fillEl.style.width = pct + '%';
+
+    phases.forEach(phase => {
+      const ts = phase.querySelectorAll('.task');
+      const dn = phase.querySelectorAll('.task.done').length;
+      const fill = phase.querySelector('.phase-meter-fill');
+      const text = phase.querySelector('.phase-meter-text');
+      if (fill) fill.style.width = ts.length ? (dn / ts.length * 100) + '%' : '0%';
+      if (text) text.textContent = `${dn}/${ts.length}`;
+    });
+  };
+
+  /* ─────────── CONFETTI ─────────── */
+  const colors = ['#6366f1','#22d3ee','#a78bfa','#4ade80','#fbbf24'];
+  const burstConfetti = (origin) => {
+    const rect = origin.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    for (let i = 0; i < 5; i++) {
+      const c = document.createElement('span');
+      c.className = 'confetti';
+      const angle = (Math.PI * 2 * i) / 5 + Math.random() * 0.4;
+      const dist = 40 + Math.random() * 30;
+      c.style.cssText = `
+        position: fixed;
+        left: ${cx}px; top: ${cy}px;
+        background: ${colors[i % colors.length]};
+        --dx: ${Math.cos(angle) * dist}px;
+        --dy: ${Math.sin(angle) * dist - 20}px;
+        z-index: 9999;
+      `;
+      document.body.appendChild(c);
+      setTimeout(() => c.remove(), 800);
+    }
+  };
+
+  /* ─────────── TASK INIT ─────────── */
+  tasks.forEach(task => {
+    const id = task.dataset.id;
+    const check = task.querySelector('.task-check');
+    const toggle = task.querySelector('.task-toggle');
+    const detail = task.querySelector('.task-detail');
+    const inner = task.querySelector('.task-detail-inner');
+
+    /* Restore checked */
+    if (state[id]?.done) {
+      task.classList.add('done');
+      check.classList.add('checked');
+    }
+
+    /* Check toggle */
+    check.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isDone = task.classList.toggle('done');
+      check.classList.toggle('checked', isDone);
+      state[id] = { ...(state[id] || {}), done: isDone };
+      saveLocal(state);
+      updateProgress();
+      if (isDone) burstConfetti(check);
+      upsertRemote(id, isDone);
+    });
+
+    /* Expand toggle */
+    const setExpanded = (open) => {
+      if (open) {
+        // Close siblings within the same phase (accordion)
+        const phase = task.closest('.phase');
+        phase.querySelectorAll('.task.expanded').forEach(t => {
+          if (t !== task) {
+            t.classList.remove('expanded');
+            const d = t.querySelector('.task-detail');
+            d.style.maxHeight = '0px';
+            const tg = t.querySelector('.task-toggle');
+            tg.firstChild.textContent = 'Ver detalhes ';
+          }
+        });
+
+        // Render thumbnail-first lite YouTube embed (click to play)
+        task.querySelectorAll('.video-wrap[data-id]').forEach(w => {
+          if (w.dataset.rendered) return;
+          const id = w.dataset.id;
+          const title = w.dataset.title || 'Vídeo';
+          const thumb = document.createElement('div');
+          thumb.className = 'video-thumb';
+          // hqdefault sempre existe; maxresdefault às vezes não
+          thumb.style.backgroundImage = `url(https://img.youtube.com/vi/${id}/hqdefault.jpg), url(https://img.youtube.com/vi/${id}/0.jpg)`;
+          const play = document.createElement('div');
+          play.className = 'video-play';
+          play.textContent = '▶';
+          w.setAttribute('role', 'button');
+          w.setAttribute('aria-label', `Tocar vídeo: ${title}`);
+          w.setAttribute('tabindex', '0');
+          w.appendChild(thumb);
+          w.appendChild(play);
+          w.dataset.rendered = '1';
+
+          const playVideo = () => {
+            if (w.querySelector('iframe')) return;
+            const iframe = document.createElement('iframe');
+            iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+            iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+            iframe.setAttribute('allowfullscreen', '');
+            iframe.title = title;
+            w.innerHTML = '';
+            w.appendChild(iframe);
+          };
+          w.addEventListener('click', playVideo);
+          w.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); playVideo(); }
+          });
+        });
+
+        task.classList.add('expanded');
+        detail.style.maxHeight = inner.scrollHeight + 40 + 'px';
+        toggle.firstChild.textContent = 'Ocultar detalhes ';
+      } else {
+        task.classList.remove('expanded');
+        detail.style.maxHeight = '0px';
+        toggle.firstChild.textContent = 'Ver detalhes ';
+      }
+    };
+
+    toggle.addEventListener('click', () => {
+      setExpanded(!task.classList.contains('expanded'));
+    });
+  });
+
+  /* ─────────── NAV PILLS ─────────── */
+  document.querySelectorAll('[data-scroll]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = document.getElementById(btn.dataset.scroll);
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  /* ─────────── RESET ─────────── */
+  document.getElementById('reset-btn').addEventListener('click', async () => {
+    if (!confirm('Resetar todo o progresso (em todos os PCs sincronizados)?')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    if (sb) {
+      try {
+        setStatus('syncing', 'apagando…');
+        await sb.from(TABLE).delete().neq('task_id', '__never__');
+      } catch (e) { console.warn('reset remoto falhou', e); }
+    }
+    location.reload();
+  });
+
+  /* ─────────── RECALC ON RESIZE ─────────── */
+  let resizeT;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeT);
+    resizeT = setTimeout(() => {
+      document.querySelectorAll('.task.expanded').forEach(t => {
+        const d = t.querySelector('.task-detail');
+        const i = t.querySelector('.task-detail-inner');
+        d.style.maxHeight = i.scrollHeight + 40 + 'px';
+      });
+    }, 150);
+  });
+
+  /* ─────────── REMOTE SYNC (Supabase) ─────────── */
+  const applyRemoteToUI = (id, done) => {
+    const task = document.querySelector(`.task[data-id="${id}"]`);
+    if (!task) return;
+    const check = task.querySelector('.task-check');
+    const wasDone = task.classList.contains('done');
+    if (wasDone === done) return;
+    task.classList.toggle('done', done);
+    check.classList.toggle('checked', done);
+    state[id] = { ...(state[id] || {}), done };
+    saveLocal(state);
+    updateProgress();
+  };
+
+  async function loadRemote() {
+    if (!sb) { setStatus('offline', 'offline'); return; }
+    try {
+      const { data, error } = await sb.from(TABLE).select('task_id, done');
+      if (error) throw error;
+      const remote = {};
+      data.forEach(r => { remote[r.task_id] = { done: r.done }; });
+      // Aplicar na UI item por item
+      tasks.forEach(t => {
+        const id = t.dataset.id;
+        const remoteDone = remote[id]?.done ?? false;
+        applyRemoteToUI(id, remoteDone);
+      });
+      setStatus('synced', 'sincronizado');
+      // Push qualquer estado local que não exista no remoto (primeira sessão)
+      const toPush = [];
+      tasks.forEach(t => {
+        const id = t.dataset.id;
+        if (state[id]?.done && !remote[id]) toPush.push({ task_id: id, done: true });
+      });
+      if (toPush.length) await sb.from(TABLE).upsert(toPush);
+    } catch (e) {
+      console.warn('loadRemote falhou:', e);
+      setStatus('offline', 'offline · cache local');
+    }
+  }
+
+  let pendingTimer = null;
+  const pending = new Map();
+  async function flushPending() {
+    if (!sb || pending.size === 0) return;
+    const rows = Array.from(pending.entries()).map(([task_id, done]) => ({ task_id, done }));
+    pending.clear();
+    setStatus('syncing', 'enviando…');
+    try {
+      const { error } = await sb.from(TABLE).upsert(rows, { onConflict: 'task_id' });
+      if (error) throw error;
+      setStatus('synced', 'sincronizado');
+    } catch (e) {
+      console.warn('upsert falhou:', e);
+      setStatus('offline', 'offline · cache local');
+      // Recoloca no pending pra tentar de novo
+      rows.forEach(r => pending.set(r.task_id, r.done));
+    }
+  }
+  function upsertRemote(id, done) {
+    if (!sb) return;
+    pending.set(id, done);
+    clearTimeout(pendingTimer);
+    pendingTimer = setTimeout(flushPending, 250); // debounce 250ms
+  }
+
+  /* Realtime subscription — outros PCs que mexerem refletem aqui */
+  if (sb) {
+    sb.channel('svn-live-2026')
+      .on('postgres_changes',
+        { event: '*', schema: 'public', table: TABLE },
+        (payload) => {
+          if (payload.eventType === 'DELETE') {
+            const id = payload.old?.task_id;
+            if (id) applyRemoteToUI(id, false);
+            return;
+          }
+          const row = payload.new;
+          if (!row) return;
+          applyRemoteToUI(row.task_id, !!row.done);
+        }
+      )
+      .subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+          // Carregar estado inicial assim que o canal sobe
+          loadRemote();
+        }
+      });
+  } else {
+    setStatus('offline', 'sem internet');
+  }
+
+  /* Re-sync quando voltar online ou voltar a aba */
+  window.addEventListener('online', loadRemote);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') loadRemote();
+  });
+
+  /* ─────────── INITIAL RENDER ─────────── */
+  updateProgress();
+})();
+</script>
+</body>
+</html>
