@@ -608,6 +608,202 @@
     .task-detail-inner { padding-left: 20px; }
   }
 
+  /* ─────────── SOS LIVE BUTTON + DRAWER ─────────── */
+  .sos-btn {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    z-index: 100;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px;
+    background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    box-shadow:
+      0 4px 16px rgba(239,68,68,0.35),
+      0 0 0 0 rgba(239,68,68,0.5);
+    transition: transform 200ms var(--ease), box-shadow 200ms var(--ease);
+    animation: sos-pulse 2.4s ease-in-out infinite;
+  }
+  .sos-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 8px 28px rgba(239,68,68,0.5);
+  }
+  .sos-btn .sos-icon {
+    font-size: 17px;
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.4));
+  }
+  @keyframes sos-pulse {
+    0%, 100% { box-shadow: 0 4px 16px rgba(239,68,68,0.35), 0 0 0 0 rgba(239,68,68,0.4); }
+    50% { box-shadow: 0 4px 16px rgba(239,68,68,0.5), 0 0 0 14px rgba(239,68,68,0); }
+  }
+
+  .sos-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 250ms var(--ease);
+    z-index: 99;
+  }
+  .sos-backdrop.open { opacity: 1; pointer-events: auto; }
+
+  .sos-drawer {
+    position: fixed;
+    right: 0; top: 0; bottom: 0;
+    width: min(440px, 100%);
+    background: rgba(15,15,22,0.96);
+    border-left: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    transform: translateX(100%);
+    transition: transform 350ms var(--ease);
+    z-index: 101;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: -20px 0 60px rgba(0,0,0,0.5);
+  }
+  .sos-drawer.open { transform: translateX(0); }
+  .sos-drawer header.sos-head {
+    padding: 22px 24px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sos-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #f87171;
+    margin-bottom: 4px;
+  }
+  .sos-drawer h3 {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+  }
+  .sos-close {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg-elevated);
+    color: var(--text-secondary);
+    font-size: 16px;
+    transition: all 200ms var(--ease);
+    display: grid; place-items: center;
+  }
+  .sos-close:hover { background: var(--danger-bg); color: var(--danger-fg); border-color: var(--danger-border); }
+
+  .sos-tabs {
+    display: flex;
+    overflow-x: auto;
+    padding: 14px 18px 0;
+    gap: 6px;
+    border-bottom: 1px solid var(--border);
+    scrollbar-width: thin;
+  }
+  .sos-tab {
+    flex-shrink: 0;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid transparent;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    transition: all 200ms var(--ease);
+    margin-bottom: -1px;
+    white-space: nowrap;
+  }
+  .sos-tab:hover { color: var(--text-primary); }
+  .sos-tab.active {
+    color: var(--text-primary);
+    background: var(--bg-elevated);
+    border-color: var(--border);
+    border-bottom-color: rgba(15,15,22,0.96);
+  }
+
+  .sos-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 22px 24px 60px;
+    scrollbar-width: thin;
+  }
+  .sos-panel { display: none; animation: sos-fade 280ms var(--ease); }
+  .sos-panel.active { display: block; }
+  @keyframes sos-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+  .sos-panel h4 {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: 18px 0 8px;
+  }
+  .sos-panel h4:first-child { margin-top: 0; }
+  .sos-panel p { font-size: 13px; line-height: 1.6; color: var(--text-secondary); margin-bottom: 10px; }
+  .sos-panel ul, .sos-panel ol { font-size: 13px; line-height: 1.65; color: var(--text-secondary); padding-left: 20px; margin-bottom: 12px; }
+  .sos-panel li { margin-bottom: 5px; }
+  .sos-panel strong { color: var(--text-primary); font-weight: 500; }
+  .sos-panel code {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    background: rgba(99,102,241,0.1);
+    color: #c7d2fe;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(99,102,241,0.18);
+  }
+  .sos-fix {
+    background: linear-gradient(135deg, rgba(74,222,128,0.08) 0%, rgba(34,211,238,0.05) 100%);
+    border: 1px solid rgba(74,222,128,0.2);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+  .sos-fix-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #4ade80;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sos-warning {
+    background: rgba(251,191,36,0.06);
+    border: 1px solid rgba(251,191,36,0.2);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin: 12px 0;
+    font-size: 12.5px;
+    color: #fcd34d;
+  }
+
+  @media (max-width: 720px) {
+    .sos-btn { right: 16px; bottom: 16px; padding: 12px 18px; font-size: 13px; }
+    .sos-btn .sos-label { display: none; }
+  }
+
   /* ─────────── SYNC BADGE ─────────── */
   .sync-badge {
     display: inline-flex;
@@ -1205,6 +1401,102 @@
             </div></div>
           </article>
 
+          <!-- 4.5 — Configurar Zoom (vídeo + áudio + fundo) -->
+          <article class="task" data-id="4.5">
+            <div class="task-row">
+              <button class="task-check"></button>
+              <div class="task-content">
+                <div class="task-head">
+                  <h3 class="task-title">Configurar Zoom: vídeo, áudio, fundo virtual e processamentos</h3>
+                  <span class="badge hoje">Qui 7/5</span>
+                  <span class="badge urgente">Urgente</span>
+                </div>
+                <p class="task-desc">Selecionar câmera virtual do OBS, microfone certo, desativar processamentos que estragam mic profissional.</p>
+                <button class="task-toggle">Ver detalhes <span class="arrow">▾</span></button>
+              </div>
+            </div>
+            <div class="task-detail"><div class="task-detail-inner">
+              <p><strong>📹 VÍDEO — Settings → Video</strong></p>
+              <ul>
+                <li><strong>Camera:</strong> selecionar <code>OBS Virtual Camera</code> no dropdown
+                  <br>↳ Antes disso, no OBS: clicar em <code>Start Virtual Camera</code> no canto inferior direito. Se não aparecer no Zoom, reiniciar Zoom depois de iniciar a Virtual Cam.
+                </li>
+                <li><strong>Original ratio:</strong> ON (16:9)</li>
+                <li><strong>HD:</strong> ON (Habilitar HD)</li>
+                <li><strong>Mirror my video:</strong> <span style="color:#fb923c">OFF</span> — IMPORTANTE. Senão participantes vêem espelhado, texto invertido</li>
+                <li><strong>Touch up my appearance:</strong> <span style="color:#fb923c">OFF</span> — degrada qualidade</li>
+                <li><strong>Adjust for low light:</strong> <span style="color:#fb923c">OFF</span> — você já tem iluminação cuidada, deixar Zoom intacto</li>
+              </ul>
+
+              <p><strong>🎤 ÁUDIO — Settings → Audio</strong></p>
+              <p>Tem 2 caminhos válidos. Use <strong>Opção A</strong> se as animações dos sócios têm áudio que precisa ir pros participantes. Use <strong>Opção B</strong> se for só voz.</p>
+
+              <p><strong>Opção A (recomendada — mix completo):</strong></p>
+              <ul>
+                <li>Microphone: <code>VoiceMeeter Output</code> (recebe H6 + áudio das animações OBS)</li>
+                <li>No OBS: na aba Audio, <strong>Monitoring Device = VoiceMeeter Aux Input</strong>, e nas faixas de áudio (Desktop Audio + Media Source) ativar <code>Monitor and Output</code></li>
+                <li>No VoiceMeeter: garantir que o input <code>VoiceMeeter Aux</code> tem botão <code>B1</code> ativo (envia pro Zoom)</li>
+              </ul>
+
+              <p><strong>Opção B (simples — só voz):</strong></p>
+              <ul>
+                <li>Microphone: <code>Zoom H6</code> direto (bypass VoiceMeeter)</li>
+                <li>Animações com áudio NÃO chegam ao Zoom — só o que apresentadores falam</li>
+              </ul>
+
+              <p><strong>Speaker / Saída de áudio:</strong></p>
+              <ul>
+                <li><span style="color:#fb923c">⚠️ NUNCA selecionar VoiceMeeter</span> como Speaker — cria loop de áudio (eco infinito)</li>
+                <li>Selecionar fone do operador (cabo P2 da placa-mãe) ou caixa de som monitor</li>
+              </ul>
+
+              <p><strong>Processamentos a DESATIVAR (tudo com mic profissional H6 estraga):</strong></p>
+              <ul>
+                <li><strong>Automatically adjust microphone volume:</strong> OFF</li>
+                <li><strong>Suppress background noise:</strong> <code>Low</code> ou <code>Off</code></li>
+                <li><strong>High fidelity music mode:</strong> <code>ON</code> (se disponível no plano — qualidade superior pra apresentação)</li>
+                <li><strong>Echo cancellation:</strong> <code>Auto</code> (deixa)</li>
+                <li><strong>Stereo audio:</strong> <code>ON</code> (se Pro+)</li>
+                <li><strong>Original sound for musicians:</strong> ativar e usar o toggle no canto superior esquerdo da reunião</li>
+              </ul>
+
+              <p><strong>🌫️ FUNDO VIRTUAL / BLUR — Settings → Background &amp; Effects</strong></p>
+              <ul>
+                <li><strong>Blur (desfoque):</strong> mais rápido, sem chroma key, funciona em qualquer fundo. Recomendado se PC ainda tem GPU sobrando.</li>
+                <li><strong>Imagem custom:</strong> precisa fundo verde (chroma key) ou contraste forte com o apresentador. Sem chroma, recortes com cabelo ficam ruins.</li>
+                <li><strong>⚠️ Fundo virtual consome GPU.</strong> Com 2 câmeras Sony USB + OBS encoder + Zoom rodando, pode estourar. Se notar lag, <strong>desativar fundo virtual</strong> e investir em iluminação real do cenário.</li>
+              </ul>
+
+              <p><strong>OUTROS — antes de começar a live:</strong></p>
+              <ul>
+                <li>Settings → Recording → marcar <code>Save to local computer</code> + escolher pasta de muito espaço (HD externo)</li>
+                <li>Settings → Recording → marcar <code>Record a separate audio file for each participant</code> (útil pra editar depois)</li>
+                <li>Hotkeys importantes pra decorar:
+                  <ul>
+                    <li><code>Alt+A</code> — mute/unmute</li>
+                    <li><code>Alt+V</code> — vídeo on/off</li>
+                    <li><code>Alt+S</code> — start/stop screen share</li>
+                    <li><code>Alt+R</code> — record</li>
+                  </ul>
+                </li>
+                <li>Designar <strong>Co-host</strong> antes da live: vai ajudar mutar quem entrar tarde, controlar caixinha de espera, gerenciar Q&amp;A se houver</li>
+                <li><strong>Sala de espera (Waiting Room):</strong> ativar — controle de quem entra e quando</li>
+                <li><strong>Senha:</strong> habilitar (link com password embutido pra simplificar)</li>
+              </ul>
+
+              <p><strong>📋 Checklist final 10 min antes:</strong></p>
+              <ul>
+                <li>OBS rodando + Virtual Cam ON</li>
+                <li>VoiceMeeter aberto + roteamento OK</li>
+                <li>Zoom: câmera = OBS Virtual, mic = VM Output (ou H6), speaker = fone/monitor (não VM)</li>
+                <li>Fundo virtual decidido (blur ou off)</li>
+                <li>Recording configurado</li>
+                <li>Co-host designado</li>
+                <li>Test com participante de fora confirma vídeo + áudio chegando bons</li>
+              </ul>
+            </div></div>
+          </article>
+
         </div>
       </section>
 
@@ -1511,7 +1803,7 @@
       <div class="side-card">
         <div class="side-eyebrow">Arquitetura de Sinais</div>
         <h3 class="side-title">Fluxo de vídeo e áudio</h3>
-        <svg class="signal-svg" viewBox="0 0 380 460" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de fluxo de sinais">
+        <svg class="signal-svg" viewBox="0 0 380 480" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de fluxo de sinais (vídeo + áudio)">
           <defs>
             <linearGradient id="cam-grad" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0%" stop-color="#6366f1"/>
@@ -1526,26 +1818,69 @@
               <stop offset="100%" stop-color="#16a34a"/>
             </linearGradient>
             <filter id="glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            <marker id="arrow-video" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 z" fill="#6366f1" opacity="0.7"/>
+            </marker>
+            <marker id="arrow-audio" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 z" fill="#22d3ee" opacity="0.7"/>
+            </marker>
+            <marker id="arrow-ndi" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 z" fill="#a78bfa" opacity="0.7"/>
+            </marker>
+            <marker id="arrow-out" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 z" fill="#4ade80" opacity="0.85"/>
+            </marker>
           </defs>
 
-          <!-- Connections -->
+          <!-- Vídeo: cameras → OBS -->
           <g stroke="#6366f1" stroke-width="1.5" fill="none" opacity="0.55" stroke-dasharray="3 3">
-            <path d="M 80 50 L 175 110"/>
-            <path d="M 80 110 L 175 110"/>
+            <path d="M 80 50 L 175 105" marker-end="url(#arrow-video)"/>
+            <path d="M 80 110 L 175 115" marker-end="url(#arrow-video)"/>
           </g>
-          <g stroke="#22d3ee" stroke-width="1.5" fill="none" opacity="0.55" stroke-dasharray="3 3">
-            <path d="M 80 175 L 175 175"/>
-            <path d="M 175 215 L 175 250"/>
-            <path d="M 100 295 L 145 295"/>
-            <path d="M 230 295 L 275 295"/>
+
+          <!-- Vídeo: OBS Virtual Cam → ZOOM -->
+          <g stroke="#6366f1" stroke-width="2" fill="none" opacity="0.7">
+            <path d="M 270 105 L 290 100" marker-end="url(#arrow-video)"/>
           </g>
-          <g stroke="#8b5cf6" stroke-width="1.5" fill="none" opacity="0.55" stroke-dasharray="3 3">
-            <path d="M 80 380 L 175 380"/>
-            <path d="M 175 380 L 175 145"/>
+          <text x="271" y="98" fill="#a5b4fc" font-family="SF Mono,monospace" font-size="7">Virtual Cam</text>
+
+          <!-- Áudio: H6 → VoiceMeeter -->
+          <g stroke="#22d3ee" stroke-width="1.5" fill="none" opacity="0.6" stroke-dasharray="3 3">
+            <path d="M 80 175 L 135 235" marker-end="url(#arrow-audio)"/>
           </g>
-          <g stroke="#4ade80" stroke-width="2" fill="none" opacity="0.7">
-            <path d="M 270 110 L 350 110"/>
+
+          <!-- Áudio: OBS Desktop Audio → VoiceMeeter (animações sócios) -->
+          <g stroke="#22d3ee" stroke-width="1.2" fill="none" opacity="0.45" stroke-dasharray="2 4">
+            <path d="M 200 145 L 175 235" marker-end="url(#arrow-audio)"/>
           </g>
+          <text x="180" y="195" fill="#67e8f9" font-family="SF Mono,monospace" font-size="6">OBS Aux</text>
+
+          <!-- VoiceMeeter → BTs (A1/A2) -->
+          <g stroke="#22d3ee" stroke-width="1.5" fill="none" opacity="0.6" stroke-dasharray="3 3">
+            <path d="M 135 270 L 100 290" marker-end="url(#arrow-audio)"/>
+            <path d="M 245 270 L 275 290" marker-end="url(#arrow-audio)"/>
+          </g>
+          <text x="105" y="280" fill="#67e8f9" font-family="SF Mono,monospace" font-size="6">A1</text>
+          <text x="252" y="280" fill="#67e8f9" font-family="SF Mono,monospace" font-size="6">A2</text>
+
+          <!-- VoiceMeeter B1 → ZOOM (mic) -->
+          <g stroke="#22d3ee" stroke-width="2" fill="none" opacity="0.75">
+            <path d="M 245 248 Q 290 248 320 145" marker-end="url(#arrow-audio)"/>
+          </g>
+          <text x="276" y="200" fill="#22d3ee" font-family="SF Mono,monospace" font-size="7" font-weight="600">B1 (mic)</text>
+
+          <!-- PC PPT → OBS via NDI -->
+          <g stroke="#a78bfa" stroke-width="1.5" fill="none" opacity="0.55" stroke-dasharray="3 3">
+            <path d="M 80 380 L 175 140" marker-end="url(#arrow-ndi)"/>
+          </g>
+          <text x="115" y="280" fill="#a78bfa" font-family="SF Mono,monospace" font-size="7">NDI · LAN</text>
+
+          <!-- ZOOM → Participantes -->
+          <g stroke="#4ade80" stroke-width="2" fill="none" opacity="0.85">
+            <path d="M 330 165 L 330 430" marker-end="url(#arrow-out)"/>
+          </g>
+
+          <!-- ─── BLOCOS ─── -->
 
           <!-- FX30 -->
           <g transform="translate(20,32)">
@@ -1559,11 +1894,11 @@
             <text x="30" y="16" text-anchor="middle" fill="#fff" font-family="SF Mono,monospace" font-size="9" font-weight="600">A7S III</text>
             <text x="30" y="28" text-anchor="middle" fill="#e0e7ff" font-family="SF Mono,monospace" font-size="7">USB-C</text>
           </g>
-          <!-- H6 -->
+          <!-- H6 mics -->
           <g transform="translate(20,157)">
             <rect width="60" height="36" rx="8" fill="url(#aud-grad)" filter="url(#glow)"/>
             <text x="30" y="16" text-anchor="middle" fill="#022" font-family="SF Mono,monospace" font-size="9" font-weight="600">Zoom H6</text>
-            <text x="30" y="28" text-anchor="middle" fill="#0e7490" font-family="SF Mono,monospace" font-size="7">USB</text>
+            <text x="30" y="28" text-anchor="middle" fill="#0e7490" font-family="SF Mono,monospace" font-size="7">2 mics</text>
           </g>
 
           <!-- PC + OBS (central) -->
@@ -1574,19 +1909,19 @@
           </g>
 
           <!-- VoiceMeeter -->
-          <g transform="translate(135,250)">
-            <rect width="110" height="44" rx="10" fill="#0f1419" stroke="#22d3ee" stroke-width="1.5"/>
-            <text x="55" y="20" text-anchor="middle" fill="#f0f0f5" font-family="Outfit,sans-serif" font-size="11" font-weight="500">VoiceMeeter</text>
-            <text x="55" y="34" text-anchor="middle" fill="#8b8b9e" font-family="SF Mono,monospace" font-size="8">A1 · A2 split</text>
+          <g transform="translate(135,235)">
+            <rect width="110" height="40" rx="10" fill="#0f1419" stroke="#22d3ee" stroke-width="1.5"/>
+            <text x="55" y="18" text-anchor="middle" fill="#f0f0f5" font-family="Outfit,sans-serif" font-size="11" font-weight="500">VoiceMeeter</text>
+            <text x="55" y="32" text-anchor="middle" fill="#8b8b9e" font-family="SF Mono,monospace" font-size="7">mix · A1·A2·B1</text>
           </g>
 
           <!-- BT Fones -->
-          <g transform="translate(35,275)">
+          <g transform="translate(35,290)">
             <rect width="65" height="38" rx="10" fill="rgba(34,211,238,0.12)" stroke="#22d3ee" stroke-width="1"/>
             <text x="32" y="17" text-anchor="middle" fill="#22d3ee" font-family="SF Mono,monospace" font-size="9" font-weight="600">BT 1</text>
             <text x="32" y="29" text-anchor="middle" fill="#67e8f9" font-family="SF Mono,monospace" font-size="7">Fone A</text>
           </g>
-          <g transform="translate(275,275)">
+          <g transform="translate(275,290)">
             <rect width="65" height="38" rx="10" fill="rgba(34,211,238,0.12)" stroke="#22d3ee" stroke-width="1"/>
             <text x="32" y="17" text-anchor="middle" fill="#22d3ee" font-family="SF Mono,monospace" font-size="9" font-weight="600">BT 2</text>
             <text x="32" y="29" text-anchor="middle" fill="#67e8f9" font-family="SF Mono,monospace" font-size="7">Fone B</text>
@@ -1598,18 +1933,21 @@
             <text x="30" y="18" text-anchor="middle" fill="#c4b5fd" font-family="SF Mono,monospace" font-size="8" font-weight="600">PC PPT</text>
             <text x="30" y="30" text-anchor="middle" fill="#a78bfa" font-family="SF Mono,monospace" font-size="7">NDI Tx</text>
           </g>
-          <text x="135" y="378" fill="#a78bfa" font-family="SF Mono,monospace" font-size="8">NDI · LAN</text>
 
-          <!-- ZOOM (destination) -->
+          <!-- ZOOM (destination, agora maior pra mostrar 2 inputs) -->
           <g transform="translate(290,90)">
-            <rect width="80" height="50" rx="10" fill="url(#dest-grad)" filter="url(#glow)"/>
-            <text x="40" y="22" text-anchor="middle" fill="#022c1c" font-family="Outfit,sans-serif" font-size="11" font-weight="600">ZOOM</text>
-            <text x="40" y="38" text-anchor="middle" fill="#052e1d" font-family="SF Mono,monospace" font-size="8">Virtual Cam</text>
+            <rect width="80" height="76" rx="10" fill="url(#dest-grad)" filter="url(#glow)"/>
+            <text x="40" y="22" text-anchor="middle" fill="#022c1c" font-family="Outfit,sans-serif" font-size="13" font-weight="600">ZOOM</text>
+            <line x1="8" y1="32" x2="72" y2="32" stroke="#022c1c" stroke-width="0.5" opacity="0.3"/>
+            <text x="40" y="46" text-anchor="middle" fill="#052e1d" font-family="SF Mono,monospace" font-size="7" font-weight="600">📹 Cam</text>
+            <text x="40" y="56" text-anchor="middle" fill="#052e1d" font-family="SF Mono,monospace" font-size="6">OBS Virtual</text>
+            <text x="40" y="68" text-anchor="middle" fill="#052e1d" font-family="SF Mono,monospace" font-size="7" font-weight="600">🎤 Mic</text>
+            <text x="40" y="78" text-anchor="middle" fill="#052e1d" font-family="SF Mono,monospace" font-size="6">VM Output</text>
           </g>
 
           <!-- Final destination -->
-          <g transform="translate(125,420)">
-            <text x="65" y="14" text-anchor="middle" fill="#4ade80" font-family="Outfit,sans-serif" font-size="11">→ Participantes</text>
+          <g transform="translate(280,440)">
+            <text x="50" y="14" text-anchor="middle" fill="#4ade80" font-family="Outfit,sans-serif" font-size="11">→ Participantes</text>
           </g>
         </svg>
 
@@ -1647,6 +1985,211 @@
   </footer>
 
 </div>
+
+<!-- ════════ SOS LIVE TOOLKIT ════════ -->
+<button class="sos-btn" id="sos-btn" aria-label="Abrir SOS ao vivo" aria-expanded="false">
+  <span class="sos-icon">🚨</span>
+  <span class="sos-label">SOS ao vivo</span>
+</button>
+<div class="sos-backdrop" id="sos-backdrop"></div>
+<aside class="sos-drawer" id="sos-drawer" aria-hidden="true" aria-labelledby="sos-title">
+  <header class="sos-head">
+    <div>
+      <div class="sos-eyebrow">Troubleshooting ao vivo</div>
+      <h3 id="sos-title">SOS · soluções rápidas</h3>
+    </div>
+    <button class="sos-close" id="sos-close" aria-label="Fechar SOS">✕</button>
+  </header>
+  <nav class="sos-tabs" role="tablist" aria-label="Categorias de problema">
+    <button class="sos-tab active" data-tab="sync" role="tab">Sync labial</button>
+    <button class="sos-tab" data-tab="audio" role="tab">Áudio sumiu</button>
+    <button class="sos-tab" data-tab="video" role="tab">Vídeo travou</button>
+    <button class="sos-tab" data-tab="mic" role="tab">Mic ruim</button>
+    <button class="sos-tab" data-tab="zoom" role="tab">Zoom rejoin</button>
+    <button class="sos-tab" data-tab="check" role="tab">Pré-live 60s</button>
+  </nav>
+  <div class="sos-content">
+
+    <!-- Tab: Sync labial -->
+    <article class="sos-panel active" data-panel="sync">
+      <h4>Sintoma</h4>
+      <p>Boca do apresentador mexe e o som chega <strong>antes ou depois</strong> — sincronia labial errada. Participantes do Zoom vêem isso, você muitas vezes não.</p>
+
+      <div class="sos-fix">
+        <div class="sos-fix-label">⚡ Fix em 10 segundos</div>
+        <ol>
+          <li>OBS → painel <strong>Audio Mixer</strong></li>
+          <li>Engrenagem na faixa do Mic/Aux → <code>Advanced Audio Properties</code></li>
+          <li>Coluna <strong>Sync Offset (ms)</strong> → digitar valor:
+            <ul>
+              <li><strong>Positivo</strong> (ex: <code>+100</code>) = atrasa áudio. Use se boca mexe ANTES do som.</li>
+              <li><strong>Negativo</strong> (ex: <code>-80</code>) = adianta áudio. Use se som chega ANTES da boca.</li>
+            </ul>
+          </li>
+          <li>Começar com 100ms, ajustar de 50 em 50. Pedir alguém em outra máquina pra te avisar quando bater.</li>
+        </ol>
+      </div>
+
+      <h4>Por que aconteceu</h4>
+      <ul>
+        <li><strong>Bluetooth dos apresentadores</strong> adiciona ~80–150ms (tolerável). Se a sua mídia tem áudio, o ouvido do apresentador pode achar que você atrasou — é o BT dele, não você.</li>
+        <li><strong>OBS encoder atolado:</strong> CPU/GPU acima de 90% faz frame drop e drift. Verificar Task Manager.</li>
+        <li><strong>Zoom processando localmente:</strong> Echo cancellation + AGC podem dessincronizar. Desativar processamentos do Zoom.</li>
+        <li><strong>Câmera USB</strong> com encoder lento (YUY2 vs MJPEG): trocar pra MJPEG se for o caso.</li>
+      </ul>
+
+      <h4>Se nada acima resolver</h4>
+      <ol>
+        <li>Stop Virtual Cam → Start novamente (no Zoom, re-selecionar câmera depois)</li>
+        <li>Reduzir resolução do OBS de 1080p pra 720p — alivia encoder</li>
+        <li>Em último caso: trocar BT por <strong>fone com fio + splitter P2</strong> (R$15) — zera o delay</li>
+      </ol>
+    </article>
+
+    <!-- Tab: Áudio sumiu -->
+    <article class="sos-panel" data-panel="audio">
+      <h4>Sintoma</h4>
+      <p>Participantes não te ouvem. VU meter no OBS não mexe ou Zoom mostra "Mic muted".</p>
+
+      <div class="sos-fix">
+        <div class="sos-fix-label">🔍 Checklist em ordem (10s cada)</div>
+        <ol>
+          <li><strong>H6 ainda conectado?</strong> LED do H6 ligado? Cabo USB no PC?</li>
+          <li><strong>Mic mudo no H6?</strong> Botão MUTE de cada canal está ativo?</li>
+          <li><strong>Mic mudo no apresentador?</strong> Lapela tem botão de mute físico</li>
+          <li><strong>VU meter no OBS:</strong> faixa do mic mexe quando alguém fala? Se não, problema é do H6 → Windows</li>
+          <li><strong>Windows Sound Settings:</strong> H6 ainda é o Input default? Sample rate ainda é 48kHz?</li>
+          <li><strong>VoiceMeeter:</strong> volume do Hardware Input 1 não está em -∞?</li>
+          <li><strong>Zoom muted?</strong> <code>Alt+A</code> pra unmute. Verificar canto inferior esquerdo do Zoom.</li>
+        </ol>
+      </div>
+
+      <h4>Restart rápido sem perder a live</h4>
+      <ul>
+        <li><strong>H6:</strong> tirar e recolocar o cabo USB. Windows reidentifica em 3s. OBS reconecta automático.</li>
+        <li><strong>VoiceMeeter travou:</strong> Menu → System Settings → Restart Audio Engine (ou <code>Ctrl+R</code>)</li>
+        <li><strong>Bluetooth do Windows:</strong> <code>Win+R</code> → <code>services.msc</code> → "Bluetooth Support Service" → Restart</li>
+      </ul>
+
+      <div class="sos-warning">
+        <strong>Plano B:</strong> tem um mic USB de backup? Conecta direto, troca o Mic Source no OBS e segue. Operadores devem ter SEMPRE 1 mic USB sobressalente em cima da mesa.
+      </div>
+    </article>
+
+    <!-- Tab: Vídeo travou -->
+    <article class="sos-panel" data-panel="video">
+      <h4>Sintoma</h4>
+      <p>Imagem do apresentador congelada / preview do OBS preto / Zoom mostra "Camera not available".</p>
+
+      <div class="sos-fix">
+        <div class="sos-fix-label">⚡ Fix em ordem</div>
+        <ol>
+          <li><strong>Câmera Sony travou:</strong> tirar e recolocar o cabo USB. Se persistir, desligar/ligar o botão da câmera (perde 5s de live, mas resolve)</li>
+          <li><strong>Virtual Cam congelada:</strong> botão direito no preview do OBS → Refresh. Ou: Stop Virtual Camera → Start novamente. No Zoom, re-selecionar OBS Virtual Camera.</li>
+          <li><strong>OBS preview preto mas câmera funciona:</strong> abrir/fechar a Source → ou clicar com botão direito → Properties → Apply (força reload do dispositivo)</li>
+          <li><strong>OBS travou inteiro:</strong> matar processo no Task Manager → reabrir. Scene Collection auto-saved a cada 5min, perde no máximo 5min de configuração.</li>
+        </ol>
+      </div>
+
+      <h4>Causas comuns</h4>
+      <ul>
+        <li>USB hub interno do gabinete sobrecarregado — <strong>câmeras devem estar em portas USB diretas, não em hub</strong></li>
+        <li>Câmera Sony entrou em standby por inatividade — desativar Auto Power Off no menu da câmera</li>
+        <li>Cabo USB com mau contato — testar outro cabo (vale ter sobressalente)</li>
+        <li>Driver do Sony desatualizado no Windows — geralmente OBS 30+ resolve, mas se persistir, atualizar Sony Imaging Edge</li>
+      </ul>
+    </article>
+
+    <!-- Tab: Mic ruim -->
+    <article class="sos-panel" data-panel="mic">
+      <h4>Sintoma</h4>
+      <p>Áudio chega abafado, com chiado, cortando, eco, distorcendo, ou volume oscila violentamente.</p>
+
+      <div class="sos-fix">
+        <div class="sos-fix-label">🎤 Diagnóstico em 30s</div>
+        <ol>
+          <li><strong>Picos vermelhos no mixer OBS?</strong> Está clipando — abaixar o gain <strong>no H6 (físico)</strong>, NUNCA no OBS</li>
+          <li><strong>VU médio em -∞ ou muito baixo?</strong> Subir o gain no H6 até média ficar em -12 dB</li>
+          <li><strong>Áudio cortando intermitente?</strong> Se for fone BT, é interferência ou distância do PC</li>
+          <li><strong>Eco?</strong> Outro mic captou a saída do speaker — usar fones em vez de caixa de som</li>
+          <li><strong>Voz "metálica"?</strong> Compressor com ratio alto demais — verificar Filters no OBS, ratio máximo 4:1</li>
+        </ol>
+      </div>
+
+      <h4>Lapela com problema</h4>
+      <ul>
+        <li><strong>Bateria fraca:</strong> ter pilhas/cabos USB-C sobressalentes na mesa</li>
+        <li><strong>Cabo do lapela frouxo:</strong> reposicionar — TRS vs TRRS pode invertercanais</li>
+        <li><strong>Vento/ar-condicionado:</strong> usar a espumninha (windscreen) — ou redirecionar AC</li>
+        <li><strong>Roupa atritando:</strong> reposicionar mic mais alto, longe de tecido</li>
+      </ul>
+
+      <div class="sos-warning">
+        <strong>Quando trocar de mic ao vivo:</strong> avisar o apresentador, mutar no OBS (ou no H6), trocar fisicamente, voltar audio em 5s. Não tente mudar source no OBS no meio da live — usa o mic backup já configurado em CH3 ou CH4 do H6.
+      </div>
+    </article>
+
+    <!-- Tab: Zoom rejoin -->
+    <article class="sos-panel" data-panel="zoom">
+      <h4>Sintoma</h4>
+      <p>Sua conexão com o Zoom caiu. Apresentadores ainda estão no estúdio mas o Zoom mostra "Reconnecting" ou fechou de vez.</p>
+
+      <div class="sos-fix">
+        <div class="sos-fix-label">⚡ O que fazer NOS PRÓXIMOS 30 SEGUNDOS</div>
+        <ol>
+          <li><strong>Zoom tenta reconectar sozinho por ~30s.</strong> Espera. Não fecha.</li>
+          <li>Se reconectar: voltar ao normal. Os participantes só viram um <em>freeze</em> de 5–10s.</li>
+          <li>Se não reconectar: <strong>fechar Zoom completamente</strong> e abrir o link da live de novo (mesmo link, mesmo PC)</li>
+          <li>O <strong>Co-host designado</strong> readmite você automaticamente (foi configurado antes da live)</li>
+          <li>Reselecionar OBS Virtual Camera + VoiceMeeter Output (Zoom esquece config às vezes)</li>
+        </ol>
+      </div>
+
+      <h4>Plano B agressivo</h4>
+      <ul>
+        <li>Ter o link do Zoom em <strong>mais de um aparelho</strong>: PC principal, celular, notebook backup</li>
+        <li>Se PC principal cair total: entrar pelo celular como participante "Operador 2" — pelo menos os apresentadores têm continuidade</li>
+        <li>Apresentadores em outra sala? Eles podem entrar pelo celular tipo "host" enquanto você reativa o estúdio</li>
+      </ul>
+
+      <h4>Internet caiu</h4>
+      <ul>
+        <li>Tetherar do celular: Settings → Personal Hotspot → 5G/4G → conectar PC via USB ou Wi-Fi</li>
+        <li>Speedtest rápido: <a href="https://fast.com" target="_blank" rel="noopener noreferrer" style="color:var(--accent-secondary)">fast.com</a></li>
+        <li>Se foi queda do roteador: alguém vai lá, desliga 10s, liga. Volta em 30-60s.</li>
+      </ul>
+    </article>
+
+    <!-- Tab: Pré-live 60s -->
+    <article class="sos-panel" data-panel="check">
+      <h4>Checklist 60 segundos antes do "ao vivo"</h4>
+      <ol>
+        <li><strong>OBS:</strong> Virtual Cam ON, scene ativa correta, mixer mostra VU mexendo</li>
+        <li><strong>VoiceMeeter:</strong> aberto, A1+A2+B1 ativos no input do H6</li>
+        <li><strong>Zoom:</strong>
+          <ul>
+            <li>Camera = OBS Virtual Camera</li>
+            <li>Mic = VoiceMeeter Output (ou H6)</li>
+            <li>Speaker NÃO é VoiceMeeter</li>
+          </ul>
+        </li>
+        <li><strong>BTs dos apresentadores:</strong> verde, conectado, em modo Stereo (não Hands-Free)</li>
+        <li><strong>Recording ativo:</strong> Alt+R no Zoom + Start Recording no OBS</li>
+        <li><strong>Co-host designado</strong> e online</li>
+        <li><strong>Lista impressa de sócios</strong> com hotkey e nome — em cima da mesa</li>
+        <li><strong>Janela do ping</strong> rodando (<code>ping 8.8.8.8 -t</code>) num canto da tela</li>
+        <li><strong>Apps fechados:</strong> Chrome, Spotify, OneDrive, Drive sync</li>
+        <li><strong>Celular em silencioso</strong> (não vibração — capta no mic)</li>
+      </ol>
+
+      <div class="sos-fix">
+        <div class="sos-fix-label">🎯 Mantra dos 5 segundos</div>
+        <p>Antes de clicar "ir ao vivo": <strong>respira fundo, olha o VU, olha o preview, olha o ping. Se os 4 estiverem OK, vai.</strong></p>
+      </div>
+    </article>
+
+  </div>
+</aside>
 
 <script>
 (() => {
@@ -1948,6 +2491,40 @@
   } else {
     setStatus('offline', 'sem internet');
   }
+
+  /* ─────────── SOS DRAWER ─────────── */
+  const sosBtn = document.getElementById('sos-btn');
+  const sosClose = document.getElementById('sos-close');
+  const sosDrawer = document.getElementById('sos-drawer');
+  const sosBackdrop = document.getElementById('sos-backdrop');
+
+  const openSos = () => {
+    sosDrawer.classList.add('open');
+    sosBackdrop.classList.add('open');
+    sosDrawer.setAttribute('aria-hidden', 'false');
+    sosBtn.setAttribute('aria-expanded', 'true');
+  };
+  const closeSos = () => {
+    sosDrawer.classList.remove('open');
+    sosBackdrop.classList.remove('open');
+    sosDrawer.setAttribute('aria-hidden', 'true');
+    sosBtn.setAttribute('aria-expanded', 'false');
+  };
+  sosBtn?.addEventListener('click', openSos);
+  sosClose?.addEventListener('click', closeSos);
+  sosBackdrop?.addEventListener('click', closeSos);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && sosDrawer.classList.contains('open')) closeSos();
+  });
+
+  /* Tab switching */
+  document.querySelectorAll('.sos-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      document.querySelectorAll('.sos-tab').forEach(t => t.classList.toggle('active', t === tab));
+      document.querySelectorAll('.sos-panel').forEach(p => p.classList.toggle('active', p.dataset.panel === target));
+    });
+  });
 
   /* Re-sync quando voltar online ou voltar a aba */
   window.addEventListener('online', loadRemote);
